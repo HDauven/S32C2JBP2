@@ -16,7 +16,7 @@ public class Persoon {
     private final String tussenvoegsel;
     private final Calendar gebDat;
     private final String gebPlaats;
-    private Gezin ouderlijkGezin;
+    private final Gezin ouderlijkGezin;
     private final List<Gezin> alsOuderBetrokkenIn;
     private final Geslacht geslacht;
 
@@ -34,6 +34,15 @@ public class Persoon {
     Persoon(int persNr, String[] vnamen, String anaam, String tvoegsel,
             Calendar gebdat, String gebplaats, Geslacht g, Gezin ouderlijkGezin) {
         //todo opgave 1
+        this.nr = persNr;
+        this.voornamen = vnamen;
+        this.achternaam = anaam;
+        this.tussenvoegsel = tvoegsel;
+        this.gebDat = gebdat;
+        this.gebPlaats = gebplaats;
+        this.ouderlijkGezin = ouderlijkGezin;
+        this.alsOuderBetrokkenIn = null;
+        this.geslacht = g;
         throw new UnsupportedOperationException();
     }
 
@@ -75,7 +84,12 @@ public class Persoon {
      */
     public String getInitialen() {
         //todo opgave 1
-        return null;
+        String initialen = null;
+        for (String s : voornamen)
+        {
+            initialen = initialen + s.substring(0, 2) + ".";
+        }
+        return initialen;
     }
 
     /**
@@ -86,7 +100,17 @@ public class Persoon {
      */
     public String getNaam() {
         //todo opgave 1
-        return null;
+        String naam = "";
+        String initialen = getInitialen();
+            if (tussenvoegsel != null)
+            {
+                naam = initialen + " " + tussenvoegsel + " " + achternaam;
+            }
+            else
+            {
+                naam = initialen + " " + achternaam;
+            }
+        return naam;
     }
 
     /**
@@ -152,6 +176,11 @@ public class Persoon {
      */
     boolean setOuders(Gezin ouderlijkGezin) {
         //todo opgave 1
+        if (this.ouderlijkGezin == null)
+        {
+            ouderlijkGezin.breidUitMet(this);
+            return true;
+        }
         return false;
     }
 
@@ -204,6 +233,10 @@ public class Persoon {
      */
     public Gezin heeftOngehuwdGezinMet(Persoon andereOuder) {
         //todo opgave 1
+        if (andereOuder != null)
+        {
+            return andereOuder.ouderlijkGezin;
+        }
         return null;
     }
 
@@ -255,6 +288,10 @@ public class Persoon {
      */
     public boolean isGescheidenOp(Calendar datum) {
         //todo opgave 1
+        if (this.isGescheidenOp(datum) == true)
+        {
+            return true;
+        }
         return false;
     }
 

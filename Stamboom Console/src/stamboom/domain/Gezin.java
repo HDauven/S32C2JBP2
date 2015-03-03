@@ -170,6 +170,14 @@ public class Gezin {
      */
     boolean setHuwelijk(Calendar datum) {
         //todo opgave 1
+        if (this.isOngehuwd() == true)
+        {
+            if (ouder1.kanTrouwenOp(datum) && ouder2.kanTrouwenOp(datum))
+            {
+                this.huwelijksdatum = datum;
+                return true;
+            }
+        }
         return false;
     }
 
@@ -181,7 +189,16 @@ public class Gezin {
      */
     public String beschrijving() {
         //todo opgave 1
-        return null;
+        String beschrijving = "";
+        if (this.huwelijksdatum == null && this.kinderen == null)
+        {
+            beschrijving = nr + " " + ouder1.getNaam() + " " + ouder2.getNaam();
+        }
+        else
+        {
+            beschrijving = nr + " " + ouder1.getNaam() + " " + ouder2.getNaam() + " " + this.huwelijksdatum + " " + "; kinderen ;";
+        }
+        return beschrijving;
     }
 
     /**
@@ -237,6 +254,7 @@ public class Gezin {
      */
     public boolean isHuwelijkOp(Calendar datum) {
         //todo opgave 1
+        
         return false;
     }
 
