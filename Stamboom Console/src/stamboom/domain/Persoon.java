@@ -34,12 +34,17 @@ public class Persoon {
     Persoon(int persNr, String[] vnamen, String anaam, String tvoegsel,
             Calendar gebdat, String gebplaats, Geslacht g, Gezin ouderlijkGezin) {
         //todo opgave 1
+        for (String voornaam : vnamen)
+        {
+            voornaam = voornaam.substring(0,1).toUpperCase() + voornaam.substring(1).toLowerCase();
+        }
+        
         this.nr = persNr;
         this.voornamen = vnamen;
-        this.achternaam = anaam;
-        this.tussenvoegsel = tvoegsel;
+        this.achternaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
+        this.tussenvoegsel = tvoegsel.toLowerCase();
         this.gebDat = gebdat;
-        this.gebPlaats = gebplaats;
+        this.gebPlaats = gebplaats.substring(0,1).toUpperCase() + gebplaats.substring(1).toLowerCase();
         this.ouderlijkGezin = ouderlijkGezin;
         this.alsOuderBetrokkenIn = null;
         this.geslacht = g;
@@ -84,10 +89,10 @@ public class Persoon {
      */
     public String getInitialen() {
         //todo opgave 1
-        String initialen = null;
+        String initialen = "";
         for (String s : voornamen)
         {
-            initialen = initialen + s.substring(0, 2) + ".";
+            initialen = initialen + s.substring(0, 1) + ".";
         }
         return initialen;
     }
@@ -233,6 +238,7 @@ public class Persoon {
      */
     public Gezin heeftOngehuwdGezinMet(Persoon andereOuder) {
         //todo opgave 1
+        // Onduidelijke formulering
         if (andereOuder != null)
         {
             return andereOuder.ouderlijkGezin;
@@ -288,9 +294,15 @@ public class Persoon {
      */
     public boolean isGescheidenOp(Calendar datum) {
         //todo opgave 1
-        if (this.isGescheidenOp(datum) == true)
+        if (alsOuderBetrokkenIn != null)
         {
-            return true;
+            for (Gezin gezin : alsOuderBetrokkenIn)
+            {
+                if (gezin.getScheidingsdatum().equals(datum))
+                {
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -322,6 +334,7 @@ public class Persoon {
      */
     void voegJouwStamboomToe(ArrayList<PersoonMetGeneratie> lijst, int g) {
         //todo opgave 2
+        
     }
 
     /**

@@ -244,6 +244,7 @@ public class Administratie {
     public Persoon getPersoon(String[] vnamen, String anaam, String tvoegsel,
             Calendar gebdat, String gebplaats) {
         //todo opgave 1
+        
         return null;
     }
 
