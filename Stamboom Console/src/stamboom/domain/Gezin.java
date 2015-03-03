@@ -194,11 +194,41 @@ public class Gezin {
         {
             beschrijving = nr + " " + ouder1.getNaam() + " " + ouder2.getNaam();
         }
+        else if (this.huwelijksdatum == null && this.ouder2 == null)
+        {
+            beschrijving = nr + " " + ouder1.getNaam() + " " + "; kinderen ;" + bouwkinderen();
+        }
+        else if (this.ouder2 == null)
+        {
+            beschrijving = nr + " " + ouder1.getNaam() + " " + this.huwelijksdatum + " " + "; kinderen ;" + bouwkinderen();
+        }
+        else if (this.huwelijksdatum == null)
+        {
+            beschrijving = nr + " " + ouder1.getNaam() + " " + ouder2.getNaam() + " " + "; kinderen ;" + bouwkinderen();
+        }
+        else if (this.kinderen == null)
+        {
+            beschrijving = nr + " " + ouder1.getNaam() + " " + ouder2.getNaam() + " " + this.huwelijksdatum + ";";
+        }
+        else if (this.kinderen == null && this.ouder2 == null)
+        {
+            beschrijving = nr + " " + ouder1.getNaam() + " " + this.huwelijksdatum + ";";
+        }
         else
         {
-            beschrijving = nr + " " + ouder1.getNaam() + " " + ouder2.getNaam() + " " + this.huwelijksdatum + " " + "; kinderen ;";
+            beschrijving = nr + " " + ouder1.getNaam() + " " + ouder2.getNaam() + " " + this.huwelijksdatum + " " + "; kinderen ;" + bouwkinderen();
         }
         return beschrijving;
+    }
+    
+    // Helper methode die de lijst met kinderen opbouwt.
+    private String bouwkinderen() {
+        String lijstMetKinderen = ""; 
+        for (Persoon p : kinderen)
+        {
+            lijstMetKinderen += " -" + p.getVoornamen();
+        }
+        return lijstMetKinderen;
     }
 
     /**
@@ -254,8 +284,12 @@ public class Gezin {
      */
     public boolean isHuwelijkOp(Calendar datum) {
         //todo opgave 1
-        
-        return false;
+        if (datum.before(this.huwelijksdatum) || datum.equals(this.huwelijksdatum))
+        {
+            return true;
+        }
+        else 
+            return false;
     }
 
     /**
@@ -273,6 +307,11 @@ public class Gezin {
      */
     public boolean heeftGescheidenOudersOp(Calendar datum) {
         //todo opgave 1
-        return false;
+        if (this.scheidingsdatum.equals(datum))
+        {
+            return true;
+        }
+        else
+            return false;
     }
 }
