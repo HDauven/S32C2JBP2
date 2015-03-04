@@ -49,7 +49,6 @@ public class Persoon {
         this.ouderlijkGezin = ouderlijkGezin;
         this.alsOuderBetrokkenIn = null;
         this.geslacht = g;
-        throw new UnsupportedOperationException();
     }
 
     // ********methoden****************************************
