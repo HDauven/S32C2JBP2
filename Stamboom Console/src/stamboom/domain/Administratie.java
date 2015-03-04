@@ -18,8 +18,11 @@ public class Administratie {
      */
     public Administratie() {
         //todo opgave 1
-        this.personen = null;
-        this.gezinnen = null;
+        nextPersNr = 0;
+        nextGezinsNr = 0;
+        
+        this.personen = new ArrayList<>();
+        this.gezinnen = new ArrayList<>();
     }
 
     //**********************methoden****************************************
@@ -66,7 +69,26 @@ public class Administratie {
         }
 
         //todo opgave 1
-        return null;
+        for (Persoon p : personen)
+        {
+            if (p.getNaam().equals(anaam) && p.getGebPlaats().equals(gebplaats) && p.getGebDat().equals(gebdat))
+            {
+                return null;
+            }
+         }
+        
+         for (String s : vnamen)
+         {
+            s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
+         }
+         anaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
+         gebplaats = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
+         tvoegsel = tvoegsel.toLowerCase();
+                
+         Persoon newPersoon = new Persoon(nextPersNr, vnamen, anaam, tvoegsel, gebdat, gebplaats, geslacht, ouderlijkGezin);
+         personen.add(newPersoon);
+         nextPersNr++;
+         return newPersoon;
     }
 
     /**
@@ -180,7 +202,25 @@ public class Administratie {
      */
     public Gezin addHuwelijk(Persoon ouder1, Persoon ouder2, Calendar huwdatum) {
         //todo opgave 1
-        return null;
+        for (Gezin g : gezinnen)
+        {
+            if (g.getOuder1().equals(ouder1) && g.getOuder2().equals(ouder2) && g.getHuwelijksdatum() == null)
+            {
+                g.setHuwelijk(huwdatum);
+            }
+        }
+        if (ouder1.equals(ouder2) || ouder1.kanTrouwenOp(huwdatum) == false || ouder2.kanTrouwenOp(huwdatum) == false)
+        {
+            Gezin g = new Gezin(nextGezinsNr, ouder1, ouder2);
+            g.setScheiding(null);
+            gezinnen.add(g);
+            nextGezinsNr++;
+            return g;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**
@@ -208,6 +248,13 @@ public class Administratie {
     public Persoon getPersoon(int nr) {
         //todo opgave 1
         //aanname: er worden geen personen verwijderd
+        for (Persoon p : personen)
+        {
+            if (p.getNr() == nr)
+            {
+                return p;
+            }
+        }
         return null;
     }
 
@@ -218,7 +265,15 @@ public class Administratie {
      */
     public ArrayList<Persoon> getPersonenMetAchternaam(String achternaam) {
         //todo opgave 1
-        return null;
+        ArrayList<Persoon> personenMetAchternaam = new ArrayList<>();
+        for (Persoon p : personen)
+        {
+            if (p.getAchternaam().toLowerCase().equals(achternaam.toLowerCase()))
+            {
+                personenMetAchternaam.add(p);
+            }
+        }
+        return personenMetAchternaam;
     }
 
     /**
@@ -227,7 +282,7 @@ public class Administratie {
      */
     public List<Persoon> getPersonen() {
         // todo opgave 1
-        return null;
+        return (List<Persoon>) Collections.unmodifiableList(personen);
     }
 
     /**
@@ -244,7 +299,20 @@ public class Administratie {
     public Persoon getPersoon(String[] vnamen, String anaam, String tvoegsel,
             Calendar gebdat, String gebplaats) {
         //todo opgave 1
-        
+        String initialen = "";
+        for (String s : vnamen)
+        {
+            initialen += s.substring(0, 1) + ".";
+        }
+        for (Persoon p : personen)
+        {
+            if (p.getInitialen().toLowerCase().equals(initialen.toLowerCase()) && p.getTussenvoegsel().toLowerCase().equals(tvoegsel)
+                    && p.getAchternaam().toLowerCase().equals(anaam.toLowerCase())
+                    && p.getGebDat().equals((gebdat)) && p.getGebPlaats().toLowerCase()!= null)
+            {
+                return p;
+            }
+        }
         return null;
     }
 
