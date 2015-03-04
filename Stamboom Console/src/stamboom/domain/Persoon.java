@@ -107,14 +107,14 @@ public class Persoon {
         //todo opgave 1
         String naam = "";
         String initialen = getInitialen();
-            if (tussenvoegsel != null)
-            {
-                naam = initialen + " " + tussenvoegsel + " " + achternaam;
-            }
-            else
-            {
-                naam = initialen + " " + achternaam;
-            }
+        if (tussenvoegsel.equals(""))
+        {
+            naam = initialen + " " + achternaam;
+        }
+        else if (tussenvoegsel != null)
+        {
+            naam = initialen + " " + tussenvoegsel + " " + achternaam;
+        }
         return naam;
     }
 
@@ -273,9 +273,10 @@ public class Persoon {
         if(datum.compareTo(meerderjarigDatum) < 1){
             return false;
         }
-
-        for (Gezin gezin : alsOuderBetrokkenIn) {
-            if (gezin.heeftGetrouwdeOudersOp(datum)) {
+        for (Gezin gezin : alsOuderBetrokkenIn) 
+        {
+            if (gezin.heeftGetrouwdeOudersOp(datum)) 
+            {
                 return false;
             } else {
                 Calendar huwdatum = gezin.getHuwelijksdatum();

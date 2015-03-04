@@ -18,8 +18,8 @@ public class Administratie {
      */
     public Administratie() {
         //todo opgave 1
-        nextPersNr = 0;
-        nextGezinsNr = 0;
+        nextPersNr = 1;
+        nextGezinsNr = 1;
         
         this.personen = new ArrayList<>();
         this.gezinnen = new ArrayList<>();
@@ -75,7 +75,7 @@ public class Administratie {
         if (gebplaats.trim().isEmpty()) {
             throw new IllegalArgumentException("lege geboorteplaats is niet toegestaan");
         } else {
-            gebplaats = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
+            gebplaats = gebplaats.substring(0,1).toUpperCase() + gebplaats.substring(1).toLowerCase();
         }     
 
         //todo opgave 1
@@ -99,14 +99,14 @@ public class Administratie {
                 
          Persoon newPersoon = new Persoon(nextPersNr, vnamen, anaam, 
                  tvoegsel.toLowerCase(), gebdat, gebplaats, geslacht, ouderlijkGezin);
-         
+         nextPersNr++;
          personen.add(newPersoon);
          
          if (ouderlijkGezin != null) {
              ouderlijkGezin.breidUitMet(newPersoon);
          }
          
-         nextPersNr++;
+         
          return newPersoon;
     }
 
@@ -223,6 +223,7 @@ public class Administratie {
      */
     public Gezin addHuwelijk(Persoon ouder1, Persoon ouder2, Calendar huwdatum) {
         //todo opgave 1
+        
         if (ouder1.equals(ouder2)){
             return null;
         }
@@ -234,12 +235,12 @@ public class Administratie {
                 g.setHuwelijk(huwdatum);
             }
         }
-        if (ouder1.equals(ouder2) || ouder1.kanTrouwenOp(huwdatum) == false || ouder2.kanTrouwenOp(huwdatum) == false)
+        if (ouder1.equals(ouder2) && ouder1.kanTrouwenOp(huwdatum) == false && ouder2.kanTrouwenOp(huwdatum) == false)
         {
             Gezin g = new Gezin(nextGezinsNr, ouder1, ouder2);
             g.setScheiding(null);
-            gezinnen.add(g);
             nextGezinsNr++;
+            gezinnen.add(g);
             return g;
         }
         else
@@ -332,9 +333,11 @@ public class Administratie {
         }
         for (Persoon p : personen)
         {
-            if (p.getInitialen().toLowerCase().equals(initialen.toLowerCase()) && p.getTussenvoegsel().toLowerCase().equals(tvoegsel)
+            if (p.getInitialen().equals(initialen) 
+                    && p.getTussenvoegsel().toLowerCase().equals(tvoegsel.toLowerCase())
                     && p.getAchternaam().toLowerCase().equals(anaam.toLowerCase())
-                    && p.getGebDat().equals((gebdat)) && p.getGebPlaats().toLowerCase()!= null)
+                    && p.getGebDat().equals(gebdat) 
+                    && p.getGebPlaats().equals(gebplaats))
             {
                 return p;
             }
