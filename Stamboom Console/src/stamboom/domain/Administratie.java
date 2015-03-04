@@ -18,8 +18,11 @@ public class Administratie {
      */
     public Administratie() {
         //todo opgave 1
-        this.personen = null;
-        this.gezinnen = null;
+        nextPersNr = 0;
+        nextGezinsNr = 0;
+        
+        this.personen = new ArrayList<>();
+        this.gezinnen = new ArrayList<>();
     }
 
     //**********************methoden****************************************
@@ -66,7 +69,26 @@ public class Administratie {
         }
 
         //todo opgave 1
-        return null;
+        for (Persoon p : personen)
+        {
+            if (p.getNaam().equals(anaam) && p.getGebPlaats().equals(gebplaats) && p.getGebDat().equals(gebdat))
+            {
+                return null;
+            }
+         }
+        
+         for (String s : vnamen)
+         {
+            s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
+         }
+         anaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
+         gebplaats = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
+         tvoegsel = tvoegsel.toLowerCase();
+                
+         Persoon newPersoon = new Persoon(nextPersNr, vnamen, anaam, tvoegsel, gebdat, gebplaats, geslacht, ouderlijkGezin);
+         personen.add(newPersoon);
+                
+         return newPersoon;
     }
 
     /**
