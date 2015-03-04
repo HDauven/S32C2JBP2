@@ -5,8 +5,16 @@
 package stamboom.storage;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import stamboom.controller.StamboomController;
 import stamboom.domain.Administratie;
 
 public class SerializationMediator implements IStorageMediator {
@@ -31,8 +39,15 @@ public class SerializationMediator implements IStorageMediator {
         if (!isCorrectlyConfigured()) {
             throw new RuntimeException("Serialization mediator isn't initialized correctly.");
         }
-        
         // todo opgave 2
+        File bestand = new File(props.getProperty("file"));
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(bestand));
+        try {
+            Administratie admin = (Administratie) ois.readObject();
+            return admin;
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SerializationMediator.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 
@@ -43,7 +58,12 @@ public class SerializationMediator implements IStorageMediator {
         }
 
         // todo opgave 2
-  
+        File bestand = new File(props.getProperty("file"));
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(bestand))) {
+            oos.writeObject(admin);
+            oos.close();
+        }
+        
     }
 
     /**
@@ -78,5 +98,9 @@ public class SerializationMediator implements IStorageMediator {
         }
         return props.containsKey("file") 
                 && props.getProperty("file").contains(File.separator);
+    }
+
+    private OutputStream FileOutputStream(File bestand) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
