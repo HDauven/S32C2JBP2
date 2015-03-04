@@ -39,12 +39,18 @@ public class SerializationMediator implements IStorageMediator {
         if (!isCorrectlyConfigured()) {
             throw new RuntimeException("Serialization mediator isn't initialized correctly.");
         }
-        // todo opgave 2
-        File bestand = new File(props.getProperty("file"));
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(bestand));
-        try {
+         try {
+        // todo opgave 2                   
+            
+            File bestand = new File(props.getProperty("file"));
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(bestand));
             Administratie admin = (Administratie) ois.readObject();
             return admin;
+            
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (RuntimeException ex) {
+            ex.printStackTrace();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(SerializationMediator.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -98,9 +104,5 @@ public class SerializationMediator implements IStorageMediator {
         }
         return props.containsKey("file") 
                 && props.getProperty("file").contains(File.separator);
-    }
-
-    private OutputStream FileOutputStream(File bestand) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

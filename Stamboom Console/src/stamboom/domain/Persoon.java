@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import stamboom.util.StringUtilities;
 
@@ -298,7 +299,8 @@ public class Persoon {
         {
             for (Gezin gezin : alsOuderBetrokkenIn)
             {
-                if (gezin.getScheidingsdatum().equals(datum))
+                if (gezin.getScheidingsdatum().equals(datum) 
+                        && gezin.getScheidingsdatum().before(datum))
                 {
                     return true;
                 }
@@ -315,9 +317,49 @@ public class Persoon {
      * @return het aantal personen in de stamboom van deze persoon (ouders,
      * grootouders etc); de persoon zelf telt ook mee
      */
+    
+    // Helper methode die nodig is om de grootte van een gezin te achterhalen.
+      private Gezin mapIndex(HashMap<Gezin, Integer> hMap, int index)
+      {
+        return (Gezin) hMap.keySet().toArray()[index];
+     }   
+    
     public int afmetingStamboom() {
         //todo opgave 2
-        return -1;
+        int aantalMensen = 0;
+        
+        HashMap<Gezin, Integer> gezinnen = new HashMap<Gezin, Integer>();
+        gezinnen.put(ouderlijkGezin, 0);
+        
+        while(gezinnen.size() > 0) 
+        {           
+            int i = gezinnen.size() - 1;
+            Gezin g = mapIndex(gezinnen, i);
+            
+            if (gezinnen.get(mapIndex(gezinnen, i)) == 0) 
+            {
+                gezinnen.put(g, 1);
+                
+                if (g.getOuder1().getOuderlijkGezin() != null) 
+                {  
+                    gezinnen.put(g.getOuder1().getOuderlijkGezin(), 0);                         
+                } 
+                aantalMensen += 1;
+
+            } 
+            else if (gezinnen.get(mapIndex(gezinnen, i)) == 1) 
+            {
+                if (g.getOuder2() != null && g.getOuder2().getOuderlijkGezin() != null) 
+                {                    
+                    gezinnen.put(g.getOuder2().getOuderlijkGezin(), 0);     
+                } 
+                aantalMensen += 1;
+
+                gezinnen.remove(g);
+            }
+        }
+        
+        return aantalMensen;
     }
 
     /**
@@ -332,9 +374,32 @@ public class Persoon {
      * @param g >=0, het nummer van de generatie waaraan deze persoon is
      * toegewezen;
      */
-    void voegJouwStamboomToe(ArrayList<PersoonMetGeneratie> lijst, int g) {
+    void voegJouwStamboomToe(ArrayList<PersoonMetGeneratie> pmg, int g) {
         //todo opgave 2
+        //Voegt een persoon toe aan zijn stamboom
+        pmg.add(new PersoonMetGeneratie((standaardgegevens()), g));
         
+        // Extra check die de ouders van een persoon op null zet,
+        // en vervolgens via het ouderlijk gezin kijkt of deze bekend zijn
+        // of niet.
+        Persoon ouder1 = null;
+        Persoon ouder2 = null;
+        
+        if (getOuderlijkGezin() != null) 
+        {
+            ouder1 = getOuderlijkGezin().getOuder1();
+            ouder2 = getOuderlijkGezin().getOuder2();
+        }
+        
+        if (ouder1 != null)
+        {
+            ouder1.voegJouwStamboomToe(pmg, g + 1);
+        }
+        
+        if (ouder2 != null)
+        {
+            ouder2.voegJouwStamboomToe(pmg, g + 1);
+        }       
     }
 
     /**
@@ -363,7 +428,20 @@ public class Persoon {
     public String stamboomAlsString() {
         StringBuilder builder = new StringBuilder();
         //todo opgave 2
-
+        ArrayList<PersoonMetGeneratie> pmg = new ArrayList<>();
+        
+        voegJouwStamboomToe(pmg, 0);
+        
+        for (PersoonMetGeneratie p : pmg)
+        {
+            for (int i = 0; 1 < p.getGeneratie(); i++)
+            {
+                builder.append("  ");
+            }
+            
+            String pGegevens = p.getPersoonsgegevens().trim() + "\n";
+            builder.append(pGegevens);
+        }
         return builder.toString();
     }
 }

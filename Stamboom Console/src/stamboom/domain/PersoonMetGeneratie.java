@@ -17,6 +17,6 @@ public class PersoonMetGeneratie {
     }
 
     public String getPersoonsgegevens() {
-        return persoonsgegevens;
+        return persoonsgegevens.trim();
     }
 }

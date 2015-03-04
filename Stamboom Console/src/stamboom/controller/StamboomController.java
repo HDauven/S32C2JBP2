@@ -55,7 +55,7 @@ public class StamboomController {
             sm.configure(prop);
             sm.save(admin);
         } catch (IOException e) {
-        
+            e.printStackTrace();
         }       
     }
 
@@ -81,7 +81,7 @@ public class StamboomController {
                 throw new ClassNotFoundException();
             }
         } catch (IOException e) {
-        
+            e.printStackTrace();
         }
         
          

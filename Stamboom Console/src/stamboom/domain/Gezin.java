@@ -189,37 +189,43 @@ public class Gezin {
      */
     public String beschrijving() {
         //todo opgave 1
-        String beschrijving = "";
+        StringBuilder beschrijving = new StringBuilder();       
+        
+        beschrijving.append(nr + " ");
         
         if (this.huwelijksdatum == null && this.kinderen == null)
         {
-            beschrijving = nr + " " + ouder1.getNaam() + " " + ouder2.getNaam();
+            beschrijving.append(ouder1.getNaam() + " " + ouder2.getNaam());
         }
         else if (this.huwelijksdatum == null && this.ouder2 == null)
         {
-            beschrijving = nr + " " + ouder1.getNaam() + " " + "; kinderen ;" + bouwkinderen();
+            beschrijving.append(ouder1.getNaam() + " " + "; kinderen ;" + bouwkinderen());
         }
         else if (this.ouder2 == null)
         {
-            beschrijving = nr + " " + ouder1.getNaam() + " " + this.huwelijksdatum + " " + "; kinderen ;" + bouwkinderen();
+            beschrijving.append(ouder1.getNaam() + " " + 
+                    this.huwelijksdatum + " " + "; kinderen ;" + bouwkinderen());
         }
         else if (this.huwelijksdatum == null)
         {
-            beschrijving = nr + " " + ouder1.getNaam() + " " + ouder2.getNaam() + " " + "; kinderen ;" + bouwkinderen();
+            beschrijving.append(ouder1.getNaam() + " " + 
+                    ouder2.getNaam() + " " + "; kinderen ;" + bouwkinderen());
         }
         else if (this.kinderen == null)
         {
-            beschrijving = nr + " " + ouder1.getNaam() + " " + ouder2.getNaam() + " " + this.huwelijksdatum + ";";
+            beschrijving.append(ouder1.getNaam() + " " + 
+                    ouder2.getNaam() + " " + this.huwelijksdatum + ";");
         }
         else if (this.kinderen == null && this.ouder2 == null)
         {
-            beschrijving = nr + " " + ouder1.getNaam() + " " + this.huwelijksdatum + ";";
+            beschrijving.append(ouder1.getNaam() + " " + this.huwelijksdatum + ";");
         }
         else
         {
-            beschrijving = nr + " " + ouder1.getNaam() + " " + ouder2.getNaam() + " " + this.huwelijksdatum + " " + "; kinderen ;" + bouwkinderen();
+            beschrijving.append(ouder1.getNaam() + " " + 
+                    ouder2.getNaam() + " " + this.huwelijksdatum + " " + "; kinderen ;" + bouwkinderen());
         }
-        return beschrijving;
+        return beschrijving.toString();
     }
     
     // Helper methode die de lijst met kinderen opbouwt.
@@ -285,7 +291,8 @@ public class Gezin {
      */
     public boolean isHuwelijkOp(Calendar datum) {
         //todo opgave 1
-        if (datum.before(this.huwelijksdatum) || datum.equals(this.huwelijksdatum))
+        if (datum.before(this.huwelijksdatum) 
+                || datum.equals(this.huwelijksdatum))
         {
             return true;
         }
@@ -308,11 +315,18 @@ public class Gezin {
      */
     public boolean heeftGescheidenOudersOp(Calendar datum) {
         //todo opgave 1
-        if (this.scheidingsdatum.equals(datum))
-        {
+        if (ouder1.isGescheidenOp(datum))
             return true;
-        }
-        else
-            return false;
+        else if (ouder2.isGescheidenOp(datum))
+            return true;
+        
+        return false;
+        // FOUT GEINTERPRETEERD
+        //if (this.scheidingsdatum.equals(datum))
+        //{
+        //    return true;
+        //}
+        //else
+        //    return false;
     }
 }

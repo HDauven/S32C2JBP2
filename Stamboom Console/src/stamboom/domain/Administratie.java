@@ -50,43 +50,62 @@ public class Administratie {
     public Persoon addPersoon(Geslacht geslacht, String[] vnamen, String anaam,
             String tvoegsel, Calendar gebdat,
             String gebplaats, Gezin ouderlijkGezin) {
-
+        
         if (vnamen.length == 0) {
             throw new IllegalArgumentException("ten minste 1 voornaam");
         }
+        
+        // Formatteerd de voornamen van een persoon
         for (String voornaam : vnamen) {
             if (voornaam.trim().isEmpty()) {
                 throw new IllegalArgumentException("lege voornaam is niet toegestaan");
+            } else {
+                voornaam = voornaam.substring(0,1).toUpperCase() + voornaam.substring(1).toLowerCase();
             }
         }
 
+        // Formatteerd de achternaam van een persoon
         if (anaam.trim().isEmpty()) {
             throw new IllegalArgumentException("lege achternaam is niet toegestaan");
+        } else {
+            anaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
         }
 
+        // Formatteerd de geboorteplaats van een persoon
         if (gebplaats.trim().isEmpty()) {
             throw new IllegalArgumentException("lege geboorteplaats is niet toegestaan");
-        }
+        } else {
+            gebplaats = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
+        }     
 
         //todo opgave 1
+        // Controleert of de persoon uniek is of niet, op basis van een combinatie van naam, plaats en geboortedatum
         for (Persoon p : personen)
         {
-            if (p.getNaam().equals(anaam) && p.getGebPlaats().equals(gebplaats) && p.getGebDat().equals(gebdat))
+            if (p.getNaam().equals(anaam) 
+                    && p.getGebPlaats().equals(gebplaats) 
+                    && p.getGebDat().equals(gebdat))
             {
                 return null;
             }
          }
         
-         for (String s : vnamen)
-         {
-            s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
-         }
-         anaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
-         gebplaats = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
-         tvoegsel = tvoegsel.toLowerCase();
+         //for (String s : vnamen)
+         //{
+         //   s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
+         //}
+         //anaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
+         //gebplaats = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
                 
-         Persoon newPersoon = new Persoon(nextPersNr, vnamen, anaam, tvoegsel, gebdat, gebplaats, geslacht, ouderlijkGezin);
+         Persoon newPersoon = new Persoon(nextPersNr, vnamen, anaam, 
+                 tvoegsel.toLowerCase(), gebdat, gebplaats, geslacht, ouderlijkGezin);
+         
          personen.add(newPersoon);
+         
+         if (ouderlijkGezin != null) {
+             ouderlijkGezin.breidUitMet(newPersoon);
+         }
+         
          nextPersNr++;
          return newPersoon;
     }
@@ -125,7 +144,9 @@ public class Administratie {
         }
 
         Gezin gezin = new Gezin(nextGezinsNr, ouder1, ouder2);
+        
         nextGezinsNr++;
+        
         gezinnen.add(gezin);
 
         ouder1.wordtOuderIn(gezin);
@@ -202,6 +223,10 @@ public class Administratie {
      */
     public Gezin addHuwelijk(Persoon ouder1, Persoon ouder2, Calendar huwdatum) {
         //todo opgave 1
+        if (ouder1.equals(ouder2)){
+            return null;
+        }
+        
         for (Gezin g : gezinnen)
         {
             if (g.getOuder1().equals(ouder1) && g.getOuder2().equals(ouder2) && g.getHuwelijksdatum() == null)
@@ -266,6 +291,7 @@ public class Administratie {
     public ArrayList<Persoon> getPersonenMetAchternaam(String achternaam) {
         //todo opgave 1
         ArrayList<Persoon> personenMetAchternaam = new ArrayList<>();
+        
         for (Persoon p : personen)
         {
             if (p.getAchternaam().toLowerCase().equals(achternaam.toLowerCase()))
@@ -321,7 +347,7 @@ public class Administratie {
      * @return de geregistreerde gezinnen
      */
     public List<Gezin> getGezinnen() {
-        return null;
+        return this.gezinnen;
     }
 
     /**
