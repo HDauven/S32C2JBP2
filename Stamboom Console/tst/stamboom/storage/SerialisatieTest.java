@@ -1,7 +1,7 @@
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
- */
+
 package stamboom.storage;
 
 import stamboom.domain.Persoon;
@@ -23,7 +23,7 @@ import stamboom.domain.DomeinTest;
 /**
  *
  * @author Albert Lak, Frank Peeters
- */
+ 
 public class SerialisatieTest extends TestCase {
 
     @BeforeClass
@@ -79,3 +79,4 @@ public class SerialisatieTest extends TestCase {
         assertTrue(testOpslag.delete());
     }
 }
+*/

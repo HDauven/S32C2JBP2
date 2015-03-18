@@ -39,7 +39,6 @@ public class Persoon {
         {
             voornaam = voornaam.substring(0,1).toUpperCase() + voornaam.substring(1).toLowerCase();
         }
-        
         this.nr = persNr;
         this.voornamen = vnamen;
         this.achternaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
@@ -47,7 +46,7 @@ public class Persoon {
         this.gebDat = gebdat;
         this.gebPlaats = gebplaats.substring(0,1).toUpperCase() + gebplaats.substring(1).toLowerCase();
         this.ouderlijkGezin = ouderlijkGezin;
-        this.alsOuderBetrokkenIn = null;
+        this.alsOuderBetrokkenIn = new ArrayList<>();
         this.geslacht = g;
     }
 
@@ -268,6 +267,7 @@ public class Persoon {
      * Alleen meerderjarige (18+) personen kunnen trouwen.
      */
     public boolean kanTrouwenOp(Calendar datum) {
+        
         Calendar meerderjarigDatum = ((GregorianCalendar)this.gebDat.clone());
         meerderjarigDatum.add(Calendar.YEAR, 18);
         if(datum.compareTo(meerderjarigDatum) < 1){
@@ -286,6 +286,7 @@ public class Persoon {
             }
         }
         return true;
+ 
     }
 
     /**

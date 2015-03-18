@@ -235,7 +235,7 @@ public class Administratie {
                 g.setHuwelijk(huwdatum);
             }
         }
-        if (ouder1.equals(ouder2) && ouder1.kanTrouwenOp(huwdatum) == false && ouder2.kanTrouwenOp(huwdatum) == false)
+        if (!ouder1.equals(ouder2) && ouder1.kanTrouwenOp(huwdatum) && ouder2.kanTrouwenOp(huwdatum))
         {
             Gezin g = new Gezin(nextGezinsNr, ouder1, ouder2);
             g.setScheiding(null);
