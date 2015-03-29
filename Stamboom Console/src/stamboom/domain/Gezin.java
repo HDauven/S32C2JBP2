@@ -199,17 +199,17 @@ public class Gezin {
         }
         else if (this.huwelijksdatum == null && this.ouder2 == null)
         {
-            beschrijving.append(ouder1.getNaam() + " " + "; kinderen ;" + bouwkinderen());
+            beschrijving.append(ouder1.getNaam() + " " + "; kinderen :" + bouwkinderen());
         }
         else if (this.ouder2 == null)
         {
             beschrijving.append(ouder1.getNaam() + " " + 
-                    this.huwelijksdatum + " " + "; kinderen ;" + bouwkinderen());
+                    this.huwelijksdatum + " " + "; kinderen :" + bouwkinderen());
         }
         else if (this.huwelijksdatum == null)
         {
-            beschrijving.append(ouder1.getNaam() + " " + 
-                    ouder2.getNaam() + " " + "; kinderen ;" + bouwkinderen());
+            beschrijving.append(ouder1.getNaam() + " met " + 
+                    ouder2.getNaam());
         }
         else if (this.kinderen == null)
         {
@@ -223,7 +223,7 @@ public class Gezin {
         else
         {
             beschrijving.append(ouder1.getNaam() + " " + 
-                    ouder2.getNaam() + " " + this.huwelijksdatum + " " + "; kinderen ;" + bouwkinderen());
+                    ouder2.getNaam() + " " + this.huwelijksdatum + " " + "; kinderen :" + bouwkinderen());
         }
         return beschrijving.toString();
     }
