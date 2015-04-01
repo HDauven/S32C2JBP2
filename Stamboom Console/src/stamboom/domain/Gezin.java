@@ -132,14 +132,14 @@ public class Gezin {
      * @return de datum van het huwelijk (kan null zijn)
      */
     public Calendar getHuwelijksdatum() {
-        return huwelijksdatum;
+        return this.huwelijksdatum;
     }
 
     /**
      * @return de datum van scheiding (kan null zijn)
      */
     public Calendar getScheidingsdatum() {
-        return scheidingsdatum;
+        return this.scheidingsdatum;
     }
 
     /**
@@ -315,18 +315,9 @@ public class Gezin {
      */
     public boolean heeftGescheidenOudersOp(Calendar datum) {
         //todo opgave 1
-        if (ouder1.isGescheidenOp(datum))
+        if (this.scheidingsdatum.before(datum) || this.scheidingsdatum.equals(datum)) {
             return true;
-        else if (ouder2.isGescheidenOp(datum))
-            return true;
-        
-        return false;
-        // FOUT GEINTERPRETEERD
-        //if (this.scheidingsdatum.equals(datum))
-        //{
-        //    return true;
-        //}
-        //else
-        //    return false;
+        }
+         return false;
     }
 }

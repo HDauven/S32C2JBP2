@@ -229,18 +229,19 @@ public class Persoon {
     }
 
     /**
-     *
-     *
      * @param andereOuder mag null zijn
      * @return het ongehuwde gezin met de andere ouder ; mits bestaand anders
      * null
      */
     public Gezin heeftOngehuwdGezinMet(Persoon andereOuder) {
         //todo opgave 1
-        // Onduidelijke formulering
         if (andereOuder != null)
         {
-            return andereOuder.ouderlijkGezin;
+            for (Gezin g : andereOuder.getAlsOuderBetrokkenIn()) {
+                if (g.isOngehuwd()) {
+                    return this.ouderlijkGezin;
+                }
+            }
         }
         return null;
     }
@@ -251,14 +252,13 @@ public class Persoon {
      * @return true als persoon op datum getrouwd is, anders false
      */
     public boolean isGetrouwdOp(Calendar datum) {
-        for (Gezin gezin : alsOuderBetrokkenIn) {
-            if (gezin.heeftGetrouwdeOudersOp(datum)) {
+        for (Gezin g : this.getAlsOuderBetrokkenIn()) {
+            if (g.getHuwelijksdatum().equals(datum)) {
                 return true;
             }
         }
         return false;
     }
-
     /**
      *
      * @param datum
