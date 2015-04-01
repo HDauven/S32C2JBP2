@@ -7,6 +7,12 @@ import stamboom.controller.StamboomController;
 
 public class StamboomConsole {
 
+        public static void main(String[] arg) {
+        StamboomController controller = new StamboomController();
+
+        StamboomConsole console = new StamboomConsole(controller);
+        //console.startMenu();
+    }
     // **********datavelden**********************************************
     private final Scanner input;
     private final StamboomController controller;
@@ -252,12 +258,5 @@ public class StamboomConsole {
 
     String datumString(Calendar datum) {
         return StringUtilities.datumString(datum);
-    }
-
-    public static void main(String[] arg) {
-        StamboomController controller = new StamboomController();
-
-        StamboomConsole console = new StamboomConsole(controller);
-        //console.startMenu();
     }
 }

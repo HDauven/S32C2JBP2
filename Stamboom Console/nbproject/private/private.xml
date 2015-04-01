@@ -2,26 +2,9 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group name="Stamboom Console">
-            <file>file:/C:/Users/Hein/Documents/S32C2JBP2/Stamboom%20Console/src/stamboom/domain/Gezin.java</file>
-            <file>file:/C:/Users/Hein/Documents/S32C2JBP2/Stamboom%20Console/src/stamboom/domain/Persoon.java</file>
-            <file>file:/C:/Users/Hein/Documents/S32C2JBP2/Stamboom%20Console/src/stamboom/console/StamboomConsole.java</file>
-            <file>file:/C:/Users/Hein/Documents/S32C2JBP2/Stamboom%20Console/tst/stamboom/domain/DomeinTest.java</file>
-            <file>file:/C:/Users/Hein/Documents/S32C2JBP2/Stamboom%20Console/src/stamboom/domain/Administratie.java</file>
-            <file>file:/C:/Users/Hein/Documents/S32C2JBP2/Stamboom%20Console/src/stamboom/console/MenuItem.java</file>
-        </group>
         <group>
-<<<<<<< HEAD
             <file>file:/C:/Users/Jordy/Documents/Leerjaar%202/C2J/Stamboom/Stamboom%20Console/src/stamboom/storage/SerializationMediator.java</file>
-            <file>file:/C:/Users/Jordy/Documents/Leerjaar%202/C2J/Stamboom/Stamboom%20Console/src/stamboom/domain/Persoon.java</file>
-            <file>file:/C:/Users/Jordy/Documents/Leerjaar%202/C2J/Stamboom/Stamboom%20Console/src/stamboom/domain/Geslacht.java</file>
-            <file>file:/C:/Users/Jordy/Documents/Leerjaar%202/C2J/Stamboom/Stamboom%20Console/src/stamboom/domain/PersoonMetGeneratie.java</file>
-            <file>file:/C:/Users/Jordy/Documents/Leerjaar%202/C2J/Stamboom/Stamboom%20Console/src/stamboom/domain/Gezin.java</file>
-            <file>file:/C:/Users/Jordy/Documents/Leerjaar%202/C2J/Stamboom/Stamboom%20Console/src/stamboom/domain/Administratie.java</file>
             <file>file:/C:/Users/Jordy/Documents/Leerjaar%202/C2J/Stamboom/Stamboom%20Console/src/stamboom/controller/StamboomController.java</file>
-=======
-            <file>file:/C:/Users/Gebruiker/Documents/GitHub/S32C2JBP2/Stamboom%20Console/src/stamboom/domain/Administratie.java</file>
->>>>>>> e361aa2d4a8b86426ff2815858fb25ed7989e1ae
         </group>
     </open-files>
 </project-private>
