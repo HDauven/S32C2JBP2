@@ -329,15 +329,15 @@ public class Administratie {
         String initialen = "";
         for (String s : vnamen)
         {
-            initialen += s.substring(0, 1) + ".";
+            initialen = initialen + s.substring(0, 1) + ".";
         }
         for (Persoon p : personen)
         {
-            if (p.getInitialen().equals(initialen) 
+            if (p.getInitialen().toLowerCase().equals(initialen.toLowerCase()) 
                     && p.getTussenvoegsel().toLowerCase().equals(tvoegsel.toLowerCase())
                     && p.getAchternaam().toLowerCase().equals(anaam.toLowerCase())
                     && p.getGebDat().equals(gebdat) 
-                    && p.getGebPlaats().equals(gebplaats))
+                    && p.getGebPlaats().toLowerCase().equals(gebplaats.toLowerCase()))
             {
                 return p;
             }
