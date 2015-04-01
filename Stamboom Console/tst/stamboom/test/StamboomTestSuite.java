@@ -13,7 +13,7 @@ import org.junit.runners.Suite;
 import stamboom.domain.DomeinTest;
 import stamboom.domain.StamboomTest;
 import stamboom.storage.DatabaseTest;
-import stamboom.storage.SerialisatieTest;
+//import stamboom.storage.SerialisatieTest;
 
 /**
  *
@@ -23,7 +23,7 @@ import stamboom.storage.SerialisatieTest;
 @Suite.SuiteClasses({
     DomeinTest.class,
     StamboomTest.class,
-    SerialisatieTest.class,
+    //SerialisatieTest.class,
     DatabaseTest.class})
 public class StamboomTestSuite {
 

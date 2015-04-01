@@ -39,7 +39,6 @@ public class Persoon {
         {
             voornaam = voornaam.substring(0,1).toUpperCase() + voornaam.substring(1).toLowerCase();
         }
-        
         this.nr = persNr;
         this.voornamen = vnamen;
         this.achternaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
@@ -47,7 +46,7 @@ public class Persoon {
         this.gebDat = gebdat;
         this.gebPlaats = gebplaats.substring(0,1).toUpperCase() + gebplaats.substring(1).toLowerCase();
         this.ouderlijkGezin = ouderlijkGezin;
-        this.alsOuderBetrokkenIn = null;
+        this.alsOuderBetrokkenIn = new ArrayList<>();
         this.geslacht = g;
     }
 
@@ -107,14 +106,14 @@ public class Persoon {
         //todo opgave 1
         String naam = "";
         String initialen = getInitialen();
-            if (tussenvoegsel != null)
-            {
-                naam = initialen + " " + tussenvoegsel + " " + achternaam;
-            }
-            else
-            {
-                naam = initialen + " " + achternaam;
-            }
+        if (tussenvoegsel.equals(""))
+        {
+            naam = initialen + " " + achternaam;
+        }
+        else if (tussenvoegsel != null)
+        {
+            naam = initialen + " " + tussenvoegsel + " " + achternaam;
+        }
         return naam;
     }
 
@@ -268,14 +267,16 @@ public class Persoon {
      * Alleen meerderjarige (18+) personen kunnen trouwen.
      */
     public boolean kanTrouwenOp(Calendar datum) {
+        
         Calendar meerderjarigDatum = ((GregorianCalendar)this.gebDat.clone());
         meerderjarigDatum.add(Calendar.YEAR, 18);
         if(datum.compareTo(meerderjarigDatum) < 1){
             return false;
         }
-
-        for (Gezin gezin : alsOuderBetrokkenIn) {
-            if (gezin.heeftGetrouwdeOudersOp(datum)) {
+        for (Gezin gezin : alsOuderBetrokkenIn) 
+        {
+            if (gezin.heeftGetrouwdeOudersOp(datum)) 
+            {
                 return false;
             } else {
                 Calendar huwdatum = gezin.getHuwelijksdatum();
@@ -285,6 +286,7 @@ public class Persoon {
             }
         }
         return true;
+ 
     }
 
     /**
