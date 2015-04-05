@@ -1,6 +1,8 @@
 package stamboom.domain;
 
 import java.util.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Administratie {
 
@@ -9,6 +11,8 @@ public class Administratie {
     private int nextPersNr;
     private final List<Persoon> personen;
     private final List<Gezin> gezinnen;
+    private ObservableList<Gezin> observableGezinnen;
+    private ObservableList<Persoon> observablePersonen;
 
     //***********************constructoren***********************************
     /**
@@ -23,6 +27,7 @@ public class Administratie {
 
         this.personen = new ArrayList<>();
         this.gezinnen = new ArrayList<>();
+        this.observableGezinnen = FXCollections.observableList(gezinnen);
     }
 
     //**********************methoden****************************************
@@ -88,7 +93,7 @@ public class Administratie {
             }
         }
 
-         //for (String s : vnamen)
+        //for (String s : vnamen)
         //{
         //   s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
         //}
@@ -123,11 +128,11 @@ public class Administratie {
         if (ouder1.equals(ouder2)) {
             return null;
         }
-        
+
         if (ongehuwdGezinBestaat(ouder1, ouder2)) {
             return null;
         }
-        
+
         Calendar nu = Calendar.getInstance();
         if (ouder2 != null) {
             if (ouder1.isGetrouwdOp(nu) || ouder2.isGetrouwdOp(nu)) {
@@ -289,9 +294,8 @@ public class Administratie {
      *
      * @return de geregistreerde personen
      */
-    public List<Persoon> getPersonen() {
-        // todo opgave 1
-        return (List<Persoon>) Collections.unmodifiableList(personen);
+    public ObservableList<Persoon> getPersonen() {
+        return (ObservableList<Persoon>) FXCollections.unmodifiableObservableList(observablePersonen);
     }
 
     /**
@@ -328,8 +332,8 @@ public class Administratie {
      *
      * @return de geregistreerde gezinnen
      */
-    public List<Gezin> getGezinnen() {
-        return this.gezinnen;
+    public ObservableList<Gezin> getGezinnen() {
+        return (ObservableList<Gezin>) FXCollections.unmodifiableObservableList(observableGezinnen);
     }
 
     /**
