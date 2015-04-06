@@ -14,6 +14,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import stamboom.controller.StamboomController;
+import stamboom.domain.Administratie;
+import stamboom.domain.Geslacht;
 import stamboom.domain.Gezin;
 import stamboom.domain.Persoon;
 import stamboom.util.StringUtilities;
@@ -57,6 +59,15 @@ public class StamboomFXController extends StamboomController implements Initiali
     @FXML Button btOKGezinInvoer;
     @FXML Button btCancelGezinInvoer;
 
+    //INVOER PERSOON
+    @FXML TextField tfVoornamenInvoer;
+    @FXML TextField tfAchternaamInvoer;
+    @FXML TextField tfTussenvoegselInvoer;
+    @FXML TextField tfGebdatumInvoer;
+    @FXML TextField tfGebplaatsInvoer;
+    @FXML ComboBox cbGeslachtInvoer;
+    @FXML ComboBox cbOuderlijkGezinInvoer;
+
     //opgave 4
     private boolean withDatabase;
 
@@ -68,7 +79,7 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     private void initComboboxes() {
         //todo opgave 3 
-
+        cbGeslachtInvoer.getItems().addAll(Geslacht.MAN, Geslacht.VROUW);
     }
 
     public void selectPersoon(Event evt) {
@@ -109,11 +120,11 @@ public class StamboomFXController extends StamboomController implements Initiali
 
         int nr = Integer.parseInt(tfPersoonNr.getText());
         Persoon p = getAdministratie().getPersoon(nr);
-        if(getAdministratie().setOuders(p, ouderlijkGezin)){
+        if (getAdministratie().setOuders(p, ouderlijkGezin)) {
             showDialog("Success", ouderlijkGezin.toString()
-                + " is nu het ouderlijk gezin van " + p.getNaam());
+                    + " is nu het ouderlijk gezin van " + p.getNaam());
         }
-        
+
     }
 
     public void selectGezin(Event evt) {
@@ -138,12 +149,38 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     public void cancelPersoonInvoer(Event evt) {
         // todo opgave 3
-
+        clearTabPersoonInvoer(); 
     }
 
     public void okPersoonInvoer(Event evt) {
         // todo opgave 3
+        Administratie admin = new Administratie();
+        if (tfVoornamenInvoer.getText().equals("") || tfAchternaamInvoer.getText().equals("") || tfGebdatumInvoer.getText().equals("") || tfGebplaatsInvoer.getText().equals("") || cbGeslachtInvoer.getSelectionModel().getSelectedItem() == null) {
+            showDialog("Warning", "Vul voornamen, achternaam, gebdatum, gebplaats en geslacht in.");
+        } else {
+            Calendar gebDatum = null;
+            try {
+                gebDatum = StringUtilities.datum(tfGebdatumInvoer.getText());
+            } catch (IllegalArgumentException exc) {
+                showDialog("Warning", "Gebdatum :" + exc.getMessage());
+            }
 
+            if (gebDatum != null) {
+                String[] voornamen = tfVoornamenInvoer.getText().split("\\s");
+                
+                Geslacht geslacht = (Geslacht) cbGeslachtInvoer.getSelectionModel().getSelectedItem();
+                Gezin ouderlijkGezin = (Gezin) cbOuderlijkGezinInvoer.getSelectionModel().getSelectedItem();
+                if (cbOuderlijkGezinInvoer.getSelectionModel().getSelectedItem() != null) {
+                    admin.addPersoon(geslacht, voornamen, tfAchternaamInvoer.getText(), tfTussenvoegselInvoer.getText(), gebDatum, tfGebplaatsInvoer.getText(), ouderlijkGezin);
+                } else {
+                    admin.addPersoon(geslacht, voornamen, tfAchternaamInvoer.getText(), tfTussenvoegselInvoer.getText(), gebDatum, tfGebplaatsInvoer.getText(), null);
+                }
+            } else {
+                showDialog("Warning", "Vul een geldige geboortedatum in.");
+            }
+        }
+
+        clearTabPersoonInvoer();
     }
 
     public void okGezinInvoer(Event evt) {
@@ -169,7 +206,7 @@ public class StamboomFXController extends StamboomController implements Initiali
                 Calendar scheidingsdatum;
                 try {
                     scheidingsdatum = StringUtilities.datum(tfScheidingInvoer.getText());
-                    if(scheidingsdatum != null){
+                    if (scheidingsdatum != null) {
                         getAdministratie().setScheiding(g, scheidingsdatum);
                     }
                 } catch (IllegalArgumentException exc) {
@@ -190,10 +227,9 @@ public class StamboomFXController extends StamboomController implements Initiali
         clearTabGezinInvoer();
     }
 
-    
     public void showStamboom(Event evt) {
         // todo opgave 3
-        
+
     }
 
     public void createEmptyStamboom(Event evt) {
@@ -202,30 +238,25 @@ public class StamboomFXController extends StamboomController implements Initiali
         initComboboxes();
     }
 
-    
     public void openStamboom(Event evt) {
         // todo opgave 3
-       
+
     }
 
-    
     public void saveStamboom(Event evt) {
         // todo opgave 3
-       
+
     }
 
-    
     public void closeApplication(Event evt) {
         saveStamboom(evt);
         getStage().close();
     }
 
-   
     public void configureStorage(Event evt) {
         withDatabase = cmDatabase.isSelected();
     }
 
- 
     public void selectTab(Event evt) {
         Object source = evt.getSource();
         if (source == tabPersoon) {
@@ -246,16 +277,22 @@ public class StamboomFXController extends StamboomController implements Initiali
         clearTabGezinInvoer();
     }
 
-    
     private void clearTabPersoonInvoer() {
         //todo opgave 3
-        
+        tfVoornamenInvoer.clear();
+        tfAchternaamInvoer.clear();
+        tfTussenvoegsel.clear();
+        tfGebdatumInvoer.clear();
+        tfGebplaatsInvoer.clear();
+        cbGeslachtInvoer.getSelectionModel().clearSelection();
+        cbOuderlijkGezinInvoer.getSelectionModel().clearSelection();
     }
 
-    
     private void clearTabGezinInvoer() {
-        //todo opgave 3
-    
+        cbOuder1Invoer.getSelectionModel().clearSelection();
+        cbOuder2Invoer.getSelectionModel().clearSelection();
+        tfHuwelijkInvoer.clear();
+        tfScheidingInvoer.clear();
     }
 
     private void clearTabPersoon() {
@@ -271,10 +308,9 @@ public class StamboomFXController extends StamboomController implements Initiali
         lvAlsOuderBetrokkenBij.setItems(FXCollections.emptyObservableList());
     }
 
-    
     private void clearTabGezin() {
         // todo opgave 3
-       
+
     }
 
     private void showDialog(String type, String message) {

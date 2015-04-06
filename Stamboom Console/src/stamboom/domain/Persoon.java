@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import stamboom.util.StringUtilities;
 
 public class Persoon {
@@ -20,6 +22,7 @@ public class Persoon {
     private final Gezin ouderlijkGezin;
     private final List<Gezin> alsOuderBetrokkenIn;
     private final Geslacht geslacht;
+    private ObservableList<Gezin> observableAlsOuderBetrokkenIn;
 
     // ********constructoren***********************************
     /**
@@ -48,6 +51,7 @@ public class Persoon {
         this.ouderlijkGezin = ouderlijkGezin;
         this.alsOuderBetrokkenIn = new ArrayList<>();
         this.geslacht = g;
+        this.observableAlsOuderBetrokkenIn = FXCollections.observableList(alsOuderBetrokkenIn);
     }
 
     // ********methoden****************************************
@@ -165,8 +169,8 @@ public class Persoon {
     /**
      * @return de gezinnen waar deze persoon bij betrokken is
      */
-    public List<Gezin> getAlsOuderBetrokkenIn() {
-        return (List<Gezin>) Collections.unmodifiableList(alsOuderBetrokkenIn);
+    public ObservableList<Gezin> getAlsOuderBetrokkenIn() {
+        return (ObservableList<Gezin>) FXCollections.unmodifiableObservableList(observableAlsOuderBetrokkenIn);
     }
 
     /**
