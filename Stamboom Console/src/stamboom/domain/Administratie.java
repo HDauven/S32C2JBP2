@@ -321,7 +321,7 @@ public class Administratie {
                     && p.getTussenvoegsel().toLowerCase().equals(tvoegsel.toLowerCase())
                     && p.getAchternaam().toLowerCase().equals(anaam.toLowerCase())
                     && p.getGebDat().equals(gebdat)
-                    && p.getGebPlaats().equals(gebplaats)) {
+                    && p.getGebPlaats().toLowerCase().equals(gebplaats.toLowerCase())) {
                 return p;
             }
         }
