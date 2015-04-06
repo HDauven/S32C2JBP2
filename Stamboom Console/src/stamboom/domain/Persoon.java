@@ -19,7 +19,7 @@ public class Persoon {
     private final String tussenvoegsel;
     private final Calendar gebDat;
     private final String gebPlaats;
-    private final Gezin ouderlijkGezin;
+    private Gezin ouderlijkGezin;
     private final List<Gezin> alsOuderBetrokkenIn;
     private final Geslacht geslacht;
     private ObservableList<Gezin> observableAlsOuderBetrokkenIn;
@@ -187,6 +187,7 @@ public class Persoon {
         if (this.ouderlijkGezin == null)
         {
             ouderlijkGezin.breidUitMet(this);
+            this.ouderlijkGezin = ouderlijkGezin;
             return true;
         }
         return false;

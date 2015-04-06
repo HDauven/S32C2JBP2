@@ -56,6 +56,8 @@ public class Administratie {
             String tvoegsel, Calendar gebdat,
             String gebplaats, Gezin ouderlijkGezin) {
 
+        String[] voornamen = new String[vnamen.length];
+
         if (vnamen.length == 0) {
             throw new IllegalArgumentException("ten minste 1 voornaam");
         }
@@ -64,10 +66,10 @@ public class Administratie {
         for (String voornaam : vnamen) {
             if (voornaam.trim().isEmpty()) {
                 throw new IllegalArgumentException("lege voornaam is niet toegestaan");
-            } else {
-                voornaam = voornaam.substring(0, 1).toUpperCase() + voornaam.substring(1).toLowerCase();
+            } else 
+                voornamen[Arrays.asList(vnamen).indexOf(voornaam)] = voornaam.substring(0, 1).toUpperCase() + voornaam.substring(1).toLowerCase();
+               //voornaam = voornaam.substring(0, 1).toUpperCase() + voornaam.substring(1).toLowerCase();
             }
-        }
 
         // Formatteerd de achternaam van een persoon
         if (anaam.trim().isEmpty()) {
@@ -86,8 +88,8 @@ public class Administratie {
         //todo opgave 1
         // Controleert of de persoon uniek is of niet, op basis van een combinatie van naam, plaats en geboortedatum
         for (Persoon p : personen) {
-            if (p.getNaam().equals(anaam)
-                    && p.getGebPlaats().equals(gebplaats)
+            if (p.getAchternaam().toLowerCase().equals(anaam.toLowerCase())
+                    && p.getGebPlaats().toLowerCase().equals(gebplaats.toLowerCase())
                     && p.getGebDat().equals(gebdat)) {
                 return null;
             }
@@ -99,7 +101,7 @@ public class Administratie {
         //}
         //anaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
         //gebplaats = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
-        Persoon newPersoon = new Persoon(nextPersNr, vnamen, anaam,
+        Persoon newPersoon = new Persoon(nextPersNr, voornamen, anaam,
                 tvoegsel.toLowerCase(), gebdat, gebplaats, geslacht, ouderlijkGezin);
         nextPersNr++;
         personen.add(newPersoon);
@@ -317,7 +319,7 @@ public class Administratie {
             initialen += s.substring(0, 1) + ".";
         }
         for (Persoon p : personen) {
-            if (p.getInitialen().equals(initialen)
+            if (p.getInitialen().toLowerCase().equals(initialen.toLowerCase())
                     && p.getTussenvoegsel().toLowerCase().equals(tvoegsel.toLowerCase())
                     && p.getAchternaam().toLowerCase().equals(anaam.toLowerCase())
                     && p.getGebDat().equals(gebdat)
