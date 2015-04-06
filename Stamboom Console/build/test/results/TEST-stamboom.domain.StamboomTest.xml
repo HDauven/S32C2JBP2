@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="2" failures="7" hostname="Jelle-PC" name="stamboom.domain.DomeinTest" skipped="0" tests="11" time="0.153" timestamp="2015-04-06T16:23:25">
+<testsuite errors="1" failures="0" hostname="Jelle-PC" name="stamboom.domain.StamboomTest" skipped="0" tests="1" time="2.678" timestamp="2015-04-06T16:23:13">
   <properties>
     <property name="libs.jsp-compiler.javadoc" value="" />
     <property name="netbeans.autoupdate.country" value="US" />
@@ -11,7 +11,7 @@
     <property name="javafx.signing.blob" value="false" />
     <property name="libs.junit.javadoc" value="C:\Program Files\NetBeans 8.0.2\java\docs\junit-3.8.2-api.zip" />
     <property name="libs.spring-webmvc4.0.src" value="" />
-    <property name="javac.includes" value="stamboom/domain/DomeinTest.java" />
+    <property name="javac.includes" value="stamboom/domain/StamboomTest.java" />
     <property name="ant.core.lib" value="C:\Program Files\NetBeans 8.0.2\extide\ant\lib\ant.jar" />
     <property name="javadoc.windowtitle" value="" />
     <property name="libs.jsp-compilation.javadoc" value="" />
@@ -62,7 +62,7 @@
     <property name="copylibs.rebase" value="true" />
     <property name="libs.spring-webmvc3.0.maven-pom" value="" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner stamboom.domain.DomeinTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\Jelle\Documents\GitHub\S32C2JBP2\Stamboom Console\build\test\results\TEST-stamboom.domain.DomeinTest.xml crashfile=C:\Users\Jelle\Documents\GitHub\S32C2JBP2\Stamboom Console\build\junitvmwatcher8754927730519087869.properties propsfile=C:\Users\Jelle\Documents\GitHub\S32C2JBP2\Stamboom Console\build\junit799814921525532623.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner stamboom.domain.StamboomTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,C:\Users\Jelle\Documents\GitHub\S32C2JBP2\Stamboom Console\build\test\results\TEST-stamboom.domain.StamboomTest.xml crashfile=C:\Users\Jelle\Documents\GitHub\S32C2JBP2\Stamboom Console\build\junitvmwatcher8177710631347250989.properties propsfile=C:\Users\Jelle\Documents\GitHub\S32C2JBP2\Stamboom Console\build\junit931961852460263078.properties" />
     <property name="auxiliary.org-netbeans-modules-editor-indent.text.x-java.CodeStyle.project.wrapAnnotations" value="WRAP_NEVER" />
     <property name="build.classes.dir" value="build/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
@@ -88,7 +88,7 @@
     <property name="javafx.deploy.includeDT" value="true" />
     <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_40\jre\lib\endorsed" />
     <property name="user.language.format" value="nl" />
-    <property name="test.includes" value="stamboom/domain/DomeinTest.java" />
+    <property name="test.includes" value="stamboom/domain/StamboomTest.java" />
     <property name="&gt;&gt;&gt;&gt;&gt;&gt;&gt;" value="e361aa2d4a8b86426ff2815858fb25ed7989e1ae" />
     <property name="netbeans.dynamic.classpath" value="C:\Program Files\NetBeans 8.0.2\platform\core\core.jar;C:\Program Files\NetBeans 8.0.2\platform\core\org-openide-filesystems.jar;C:\Program Files\NetBeans 8.0.2\platform\core\locale\core_ja.jar;C:\Program Files\NetBeans 8.0.2\platform\core\locale\core_pt_BR.jar;C:\Program Files\NetBeans 8.0.2\platform\core\locale\core_ru.jar;C:\Program Files\NetBeans 8.0.2\platform\core\locale\core_zh_CN.jar;C:\Program Files\NetBeans 8.0.2\platform\core\locale\org-openide-filesystems_ja.jar;C:\Program Files\NetBeans 8.0.2\platform\core\locale\org-openide-filesystems_pt_BR.jar;C:\Program Files\NetBeans 8.0.2\platform\core\locale\org-openide-filesystems_ru.jar;C:\Program Files\NetBeans 8.0.2\platform\core\locale\org-openide-filesystems_zh_CN.jar;C:\Program Files\NetBeans 8.0.2\nb\core\org-netbeans-upgrader.jar;C:\Program Files\NetBeans 8.0.2\nb\core\locale\core_nb.jar;C:\Program Files\NetBeans 8.0.2\nb\core\locale\core_nb_ja.jar;C:\Program Files\NetBeans 8.0.2\nb\core\locale\core_nb_pt_BR.jar;C:\Program Files\NetBeans 8.0.2\nb\core\locale\core_nb_ru.jar;C:\Program Files\NetBeans 8.0.2\nb\core\locale\core_nb_zh_CN.jar;C:\Program Files\NetBeans 8.0.2\nb\core\locale\org-netbeans-upgrader_ja.jar;C:\Program Files\NetBeans 8.0.2\nb\core\locale\org-netbeans-upgrader_pt_BR.jar;C:\Program Files\NetBeans 8.0.2\nb\core\locale\org-netbeans-upgrader_ru.jar;C:\Program Files\NetBeans 8.0.2\nb\core\locale\org-netbeans-upgrader_zh_CN.jar" />
     <property name="jnlp.enabled" value="false" />
@@ -107,7 +107,7 @@
     <property name="javac.debug" value="true" />
     <property name="javadoc.splitindex" value="true" />
     <property name="file.separator" value="\" />
-    <property name="javac.includesfile.binary" value="C:\Users\Jelle\Documents\GitHub\S32C2JBP2\Stamboom Console\null657565989" />
+    <property name="javac.includesfile.binary" value="C:\Users\Jelle\Documents\GitHub\S32C2JBP2\Stamboom Console\null1607438801" />
     <property name="libs.junit_4.maven-pom" value="" />
     <property name="mkdist.disabled" value="false" />
     <property name="javac.test.processorpath" value="C:\Program Files\NetBeans 8.0.2\ide\modules\ext\mysql-connector-java-5.1.23-bin.jar:C:\Program Files\NetBeans 8.0.2\platform\modules\ext\junit-4.10.jar:C:\Program Files\Java\jdk1.8.0_40\jre/lib/javaws.jar:C:\Program Files\Java\jdk1.8.0_40\jre/lib/deploy.jar:C:\Program Files\Java\jdk1.8.0_40\jre/lib/plugin.jar:build/classes" />
@@ -123,7 +123,7 @@
     <property name="libs.hibernate4-persistencemodelgen.javadoc" value="" />
     <property name="libs.jaxb.javadoc" value="C:\Program Files\NetBeans 8.0.2\ide\docs\jaxb-api-doc.zip" />
     <property name="libs.struts.classpath" value="C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\antlr-2.7.2.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\bsf-2.3.0.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\commons-beanutils-1.8.0.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\commons-chain-1.2.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\commons-digester-1.8.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\commons-fileupload-1.1.1.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\commons-io-1.1.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\commons-logging-1.0.4.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\commons-validator-1.3.1.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\jstl-1.0.2.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\oro-2.0.8.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\standard-1.0.6.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\struts-core-1.3.10.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\struts-el-1.3.10.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\struts-extras-1.3.10.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\struts-faces-1.3.10.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\struts-mailreader-dao-1.3.10.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\struts-scripting-1.3.10.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\struts-taglib-1.3.10.jar;C:\Program Files\NetBeans 8.0.2\enterprise\modules\ext\struts\struts-tiles-1.3.10.jar" />
-    <property name="javac.includes.binary" value="C:\Users\Jelle\Documents\GitHub\S32C2JBP2\Stamboom Console\build\test\classes\stamboom\domain\DomeinTest.class" />
+    <property name="javac.includes.binary" value="C:\Users\Jelle\Documents\GitHub\S32C2JBP2\Stamboom Console\build\test\classes\stamboom\domain\StamboomTest.class" />
     <property name="ant.home" value="C:\Program Files\NetBeans 8.0.2\extide\ant" />
     <property name="libs.junit_4.src" value="C:\Program Files\NetBeans 8.0.2\java\docs\junit-4.10-sources.jar" />
     <property name="javafx.run.height" value="600" />
@@ -435,56 +435,17 @@
     <property name="libs.javaee-web-api-7.0.javadoc" value="C:\Program Files\NetBeans 8.0.2\enterprise\docs\javaee-doc-api.jar" />
     <property name="" value="======" />
   </properties>
-  <testcase classname="stamboom.domain.DomeinTest" name="testAddHuwelijk" time="0.073">
-    <failure message="ongehuwd gezin trouwt expected:&lt;3 J.J. Peters met A.G. Dael&gt; but was:&lt;2 A.G. Dael met J.J. Peters&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: ongehuwd gezin trouwt expected:&lt;3 J.J. Peters met A.G. Dael&gt; but was:&lt;2 A.G. Dael met J.J. Peters&gt;
-	at stamboom.domain.DomeinTest.testAddHuwelijk(DomeinTest.java:295)
-</failure>
-  </testcase>
-  <testcase classname="stamboom.domain.DomeinTest" name="testScheiding" time="0.004">
-    <failure message="scheidingsdatum ontbreekt expected:&lt;java.util.GregorianCalendar[time=?,areFieldsSet=false,areAllFieldsSet=false,lenient=true,zone=sun.util.calendar.ZoneInfo[id=&quot;Europe/Berlin&quot;,offset=3600000,dstSavings=3600000,useDaylight=true,transitions=143,lastRule=java.util.SimpleTimeZone[id=Europe/Berlin,offset=3600000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=2,startMonth=2,startDay=-1,startDayOfWeek=1,startTime=3600000,startTimeMode=2,endMode=2,endMonth=9,endDay=-1,endDayOfWeek=1,endTime=3600000,endTimeMode=2]],firstDayOfWeek=2,minimalDaysInFirstWeek=4,ERA=?,YEAR=1974,MONTH=6,WEEK_OF_YEAR=?,WEEK_OF_MONTH=?,DAY_OF_MONTH=2,DAY_OF_YEAR=?,DAY_OF_WEEK=?,DAY_OF_WEEK_IN_MONTH=?,AM_PM=0,HOUR=0,HOUR_OF_DAY=0,MINUTE=0,SECOND=0,MILLISECOND=?,ZONE_OFFSET=?,DST_OFFSET=?]&gt; but was:&lt;null&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: scheidingsdatum ontbreekt expected:&lt;java.util.GregorianCalendar[time=?,areFieldsSet=false,areAllFieldsSet=false,lenient=true,zone=sun.util.calendar.ZoneInfo[id=&quot;Europe/Berlin&quot;,offset=3600000,dstSavings=3600000,useDaylight=true,transitions=143,lastRule=java.util.SimpleTimeZone[id=Europe/Berlin,offset=3600000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=2,startMonth=2,startDay=-1,startDayOfWeek=1,startTime=3600000,startTimeMode=2,endMode=2,endMonth=9,endDay=-1,endDayOfWeek=1,endTime=3600000,endTimeMode=2]],firstDayOfWeek=2,minimalDaysInFirstWeek=4,ERA=?,YEAR=1974,MONTH=6,WEEK_OF_YEAR=?,WEEK_OF_MONTH=?,DAY_OF_MONTH=2,DAY_OF_YEAR=?,DAY_OF_WEEK=?,DAY_OF_WEEK_IN_MONTH=?,AM_PM=0,HOUR=0,HOUR_OF_DAY=0,MINUTE=0,SECOND=0,MILLISECOND=?,ZONE_OFFSET=?,DST_OFFSET=?]&gt; but was:&lt;null&gt;
-	at stamboom.domain.DomeinTest.testScheiding(DomeinTest.java:442)
-</failure>
-  </testcase>
-  <testcase classname="stamboom.domain.DomeinTest" name="testBeschrijvingGezin" time="0.003">
-    <failure message="beschrijving gezin onjuist expected:&lt;...kels met T. de Vries[; kinderen: -Markus Anna]&gt; but was:&lt;...kels met T. de Vries[]&gt;" type="junit.framework.ComparisonFailure">junit.framework.ComparisonFailure: beschrijving gezin onjuist expected:&lt;...kels met T. de Vries[; kinderen: -Markus Anna]&gt; but was:&lt;...kels met T. de Vries[]&gt;
-	at stamboom.domain.DomeinTest.testBeschrijvingGezin(DomeinTest.java:169)
-</failure>
-  </testcase>
-  <testcase classname="stamboom.domain.DomeinTest" name="testAddOngehuwdGezin" time="0.002">
-    <error type="java.lang.NullPointerException">java.lang.NullPointerException
-	at stamboom.domain.Persoon.isGetrouwdOp(Persoon.java:260)
-	at stamboom.domain.Administratie.addOngehuwdGezin(Administratie.java:138)
-	at stamboom.domain.DomeinTest.testAddOngehuwdGezin(DomeinTest.java:249)
+  <testcase classname="stamboom.domain.StamboomTest" name="testStamboom" time="2.619">
+    <error message="Java heap space" type="java.lang.OutOfMemoryError">java.lang.OutOfMemoryError: Java heap space
+	at java.util.Arrays.copyOf(Arrays.java:3332)
+	at java.lang.AbstractStringBuilder.expandCapacity(AbstractStringBuilder.java:137)
+	at java.lang.AbstractStringBuilder.ensureCapacityInternal(AbstractStringBuilder.java:121)
+	at java.lang.AbstractStringBuilder.append(AbstractStringBuilder.java:421)
+	at java.lang.StringBuilder.append(StringBuilder.java:136)
+	at stamboom.domain.Persoon.stamboomAlsString(Persoon.java:444)
+	at stamboom.domain.StamboomTest.testStamboom(StamboomTest.java:53)
 </error>
   </testcase>
-  <testcase classname="stamboom.domain.DomeinTest" name="testSetEnIsHuwelijk" time="0.002">
-    <failure message="huwelijksdatum later invoeren onjuist" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: huwelijksdatum later invoeren onjuist
-	at stamboom.domain.DomeinTest.testSetEnIsHuwelijk(DomeinTest.java:415)
-</failure>
-  </testcase>
-  <testcase classname="stamboom.domain.DomeinTest" name="testHeeftGescheidenOuders" time="0.002">
-    <error type="java.lang.NullPointerException">java.lang.NullPointerException
-	at stamboom.domain.Gezin.heeftGescheidenOudersOp(Gezin.java:320)
-	at stamboom.domain.DomeinTest.testHeeftGescheidenOuders(DomeinTest.java:462)
-</error>
-  </testcase>
-  <testcase classname="stamboom.domain.DomeinTest" name="testGetPersoonEnPersonen" time="0.001">
-    <failure message="identificatie persoon onjuist expected:&lt;P.F. Swinkels (MAN) 23-4-1950&gt; but was:&lt;null&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: identificatie persoon onjuist expected:&lt;P.F. Swinkels (MAN) 23-4-1950&gt; but was:&lt;null&gt;
-	at stamboom.domain.DomeinTest.testGetPersoonEnPersonen(DomeinTest.java:481)
-</failure>
-  </testcase>
-  <testcase classname="stamboom.domain.DomeinTest" name="testGetPersonenMetAchternaam" time="0.0" />
-  <testcase classname="stamboom.domain.DomeinTest" name="testAddPersoon" time="0.001">
-    <failure message="voornamen niet correct weergegeven expected:&lt;[Tom Jacobus]&gt; but was:&lt;[tom JACOBUS]&gt;" type="junit.framework.ComparisonFailure">junit.framework.ComparisonFailure: voornamen niet correct weergegeven expected:&lt;[Tom Jacobus]&gt; but was:&lt;[tom JACOBUS]&gt;
-	at stamboom.domain.DomeinTest.testAddPersoon(DomeinTest.java:98)
-</failure>
-  </testcase>
-  <testcase classname="stamboom.domain.DomeinTest" name="testSetOuders" time="0.001">
-    <failure message="ouders onbekend expected:&lt;1 P.F. Swinkels met T. de Vries&gt; but was:&lt;null&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: ouders onbekend expected:&lt;1 P.F. Swinkels met T. de Vries&gt; but was:&lt;null&gt;
-	at stamboom.domain.DomeinTest.testSetOuders(DomeinTest.java:139)
-</failure>
-  </testcase>
-  <testcase classname="stamboom.domain.DomeinTest" name="testGetNaam" time="0.0" />
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
