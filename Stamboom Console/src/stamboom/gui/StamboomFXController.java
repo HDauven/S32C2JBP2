@@ -8,7 +8,6 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -95,7 +94,10 @@ public class StamboomFXController extends StamboomController implements Initiali
         //todo opgave 3 
         Administratie admin = new Administratie();
         cbOuderlijkGezinInvoer.setItems(admin.getGezinnen());
+        cbOuder1Invoer.setItems(admin.getPersonen());
+        cbOuder2Invoer.setItems(admin.getPersonen());
         cbGezinnen.setItems(admin.getGezinnen());
+        cbOuderlijkGezin.setItems(admin.getGezinnen());
         cbPersonen.setItems(admin.getPersonen());
         cbGeslachtInvoer.getItems().addAll(Geslacht.MAN, Geslacht.VROUW);
     }
@@ -238,6 +240,10 @@ public class StamboomFXController extends StamboomController implements Initiali
             return;
         }
         Persoon ouder2 = (Persoon) cbOuder2Invoer.getSelectionModel().getSelectedItem();
+        if (ouder1 == ouder2 || ouder2 == ouder1) {
+            showDialog("Warning", "De ouders mogen niet gelijk zijn.");
+            return;
+        }
         Calendar huwdatum;
         try {
             huwdatum = StringUtilities.datum(tfHuwelijkInvoer.getText());
@@ -277,7 +283,12 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     public void showStamboom(Event evt) {
         // todo opgave 3
-
+        if (cbPersonen.getSelectionModel().getSelectedItem() != null) {
+            Persoon persoon = (Persoon) cbPersonen.getSelectionModel().getSelectedItem();
+            showDialog("Stamboom", persoon.stamboomAlsString());
+        } else {
+            showDialog("Warning", "Selecteert een persoon.");
+        }
     }
 
     public void createEmptyStamboom(Event evt) {
