@@ -1,10 +1,11 @@
 package stamboom.domain;
 
+import java.io.Serializable;
 import java.util.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class Administratie {
+public class Administratie implements Serializable {
 
     //************************datavelden*************************************
     private int nextGezinsNr;
