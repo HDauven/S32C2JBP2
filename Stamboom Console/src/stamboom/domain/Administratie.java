@@ -252,11 +252,8 @@ public Gezin addOngehuwdGezin(Persoon ouder1, Persoon ouder2) {
         }
 
         for (Gezin g : gezinnen) {
-            /*
-            if (g.getOuder1().equals(ouder2) && g.getOuder2().equals(ouder1)) {
-                ouder1 = g.getOuder2();
-                ouder2 = g.getOuder1();
-            } */
+            if (g.getOuder1() == ouder2)
+            
             if (g.getOuder1().equals(ouder1) && g.getOuder2().equals(ouder2) && g.getHuwelijksdatum() == null) {
                 g.setHuwelijk(huwdatum);
             }
