@@ -209,7 +209,7 @@ public class StamboomFXController extends StamboomController implements Initiali
             try {
                 gebDatum = StringUtilities.datum(tfGebdatumInvoer.getText());
             } catch (IllegalArgumentException exc) {
-                showDialog("Warning", "Gebdatum :" + exc.getMessage());
+                
             }
 
             if (gebDatum != null) {
