@@ -1,6 +1,7 @@
 package stamboom.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
@@ -37,13 +38,15 @@ public class Persoon {
      */
     Persoon(int persNr, String[] vnamen, String anaam, String tvoegsel,
             Calendar gebdat, String gebplaats, Geslacht g, Gezin ouderlijkGezin) {
-        //todo opgave 1
+        //todo opgave 
+        this.voornamen = new String[vnamen.length];
         for (String voornaam : vnamen)
         {
-            voornaam = voornaam.substring(0,1).toUpperCase() + voornaam.substring(1).toLowerCase();
+            voornamen[Arrays.asList(vnamen).indexOf(voornaam)] = voornaam.substring(0, 1).toUpperCase() + voornaam.substring(1).toLowerCase();
+            //voornaam = voornaam.substring(0,1).toUpperCase() + voornaam.substring(1).toLowerCase();
         }
         this.nr = persNr;
-        this.voornamen = vnamen;
+        //this.voornamen = vnamen;
         this.achternaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
         this.tussenvoegsel = tvoegsel.toLowerCase();
         this.gebDat = gebdat;
