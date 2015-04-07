@@ -286,6 +286,30 @@
                         </AnchorPane>
                     </content>
                   </Tab>
+                  <Tab text="Stamboom">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <SplitPane dividerPositions="0.26504297994269344" prefHeight="285.0" prefWidth="700.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <Button fx:id="btnCreateStamboom" layoutX="6.0" layoutY="14.0" mnemonicParsing="false" onAction="#createEmptyStamboom" text="Creëer Stamboom" />
+                                          <Button fx:id="btnSaveStamboom" layoutX="6.0" layoutY="69.0" mnemonicParsing="false" onAction="#saveStamboom" text="Stamboom Opslaan" />
+                                          <Button fx:id="btnOpenStamboom" layoutX="7.0" layoutY="129.0" mnemonicParsing="false" onAction="#openStamboom" text="Stamboom Openen" />
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <TextField fx:id="tfStamboom" editable="false" layoutY="2.0" prefHeight="281.0" prefWidth="510.0" promptText="Stamboom..." />
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
                     </tabs>
                 </TabPane>
             </center>

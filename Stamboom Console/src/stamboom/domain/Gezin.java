@@ -1,5 +1,6 @@
 package stamboom.domain;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -193,40 +194,21 @@ public class Gezin {
         //todo opgave 1
         StringBuilder beschrijving = new StringBuilder();       
         
-        beschrijving.append(nr + " ");
+        beschrijving.append(this.nr).append(" ").append(this.ouder1.getNaam());
         
-        if (this.huwelijksdatum == null && this.kinderen.isEmpty())
-        {
-            beschrijving.append(ouder1.getNaam() + " met " + ouder2.getNaam());
+        if (this.ouder2 != null) {
+            beschrijving.append(" met ").append(this.ouder2.getNaam());
         }
-        else if (this.huwelijksdatum == null && this.ouder2 == null)
-        {
-            beschrijving.append(ouder1.getNaam() + " " + "; kinderen :" + bouwkinderen());
+        
+        if (this.huwelijksdatum != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy");
+            beschrijving.append(" ").append(sdf.format(this.huwelijksdatum.getTime()));
         }
-        else if (this.ouder2 == null)
-        {
-            beschrijving.append(ouder1.getNaam() + " " + 
-                    this.huwelijksdatum + " " + "; kinderen :" + bouwkinderen());
+        
+        if (!this.kinderen.isEmpty()) {
+            beschrijving.append("; kinderen:").append(bouwkinderen());
         }
-        else if (this.kinderen.isEmpty() && this.ouder2 == null)
-        {
-            beschrijving.append(ouder1.getNaam() + " " + this.huwelijksdatum + ";");
-        }
-        else if (this.kinderen.isEmpty())
-        {
-            beschrijving.append(ouder1.getNaam() + " " + 
-                    ouder2.getNaam() + " " + this.huwelijksdatum + ";");
-        }
-        else if (this.huwelijksdatum == null && !this.kinderen.isEmpty())
-        {
-            beschrijving.append(ouder1.getNaam() + " met " + 
-                    ouder2.getNaam() + "; kinderen:" + bouwkinderen());
-        }
-        else
-        {
-            beschrijving.append(ouder1.getNaam() + " " + 
-                    ouder2.getNaam() + " " + this.huwelijksdatum + " " + "; kinderen:" + bouwkinderen());
-        }
+        
         return beschrijving.toString();
     }
     
@@ -293,8 +275,10 @@ public class Gezin {
      */
     public boolean isHuwelijkOp(Calendar datum) {
         //todo opgave 1
-        if (datum.before(this.huwelijksdatum) 
-                || datum.equals(this.huwelijksdatum))
+        if (this.huwelijksdatum == null || datum == null) {
+            return false;
+        }
+        else if (this.huwelijksdatum.before(datum) || this.huwelijksdatum.equals(datum))
         {
             return true;
         }

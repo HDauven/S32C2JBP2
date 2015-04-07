@@ -76,98 +76,80 @@ public class Administratie implements Serializable {
                 //voornaam = voornaam.trim();
                 voornamen[Arrays.asList(vnamen).indexOf(voornaam)] = voornaam.trim().substring(0, 1).toUpperCase() + voornaam.trim().substring(1).toLowerCase();
             }
-        //voornaam = voornaam.substring(0, 1).toUpperCase() + voornaam.substring(1).toLowerCase();
-    }
+            //voornaam = voornaam.substring(0, 1).toUpperCase() + voornaam.substring(1).toLowerCase();
+        }
 
-    // Formatteerd de achternaam van een persoon
-    if (anaam.trim () 
-        .isEmpty()) {
+        // Formatteerd de achternaam van een persoon
+        if (anaam.trim()
+                .isEmpty()) {
             throw new IllegalArgumentException("lege achternaam is niet toegestaan");
-    }
-
-    
-        else {
+        } else {
             anaam = anaam.substring(0, 1).toUpperCase() + anaam.substring(1).toLowerCase();
-    }
+        }
 
-    // Formatteerd de geboorteplaats van een persoon
-    if (gebplaats.trim () 
-        .isEmpty()) {
+        // Formatteerd de geboorteplaats van een persoon
+        if (gebplaats.trim()
+                .isEmpty()) {
             throw new IllegalArgumentException("lege geboorteplaats is niet toegestaan");
-    }
-
-    
-        else {
+        } else {
             gebplaats = gebplaats.substring(0, 1).toUpperCase() + gebplaats.substring(1).toLowerCase();
-    }
+        }
 
         //todo opgave 1
-    // Controleert of de persoon uniek is of niet, op basis van een combinatie van naam, plaats en geboortedatum
-    for (Persoon p : personen
-
-    
-        ) {
+        // Controleert of de persoon uniek is of niet, op basis van een combinatie van naam, plaats en geboortedatum
+        for (Persoon p : personen) {
             if (p.getAchternaam().toLowerCase().equals(anaam.toLowerCase())
-                && p.getGebPlaats().toLowerCase().equals(gebplaats.toLowerCase())
-                && p.getGebDat().equals(gebdat)) {
-            return null;
-        }
-    }
-
-        //for (String s : vnamen)
-    //{
-    //   s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
-    //}
-    //anaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
-    //gebplaats = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
-    Persoon newPersoon = new Persoon(nextPersNr, voornamen, anaam,
-            tvoegsel.toLowerCase(), gebdat, gebplaats, geslacht, ouderlijkGezin);
-    nextPersNr
-
-    ++;
-    personen.add (newPersoon);
-
-    if (ouderlijkGezin
-
-    
-        != null) {
-            ouderlijkGezin.breidUitMet(newPersoon);
-    }
-
-    return newPersoon ;
-}
-
-/**
- * er wordt, zo mogelijk (zie return) een (kinderloos) ongehuwd gezin met ouder1
- * en ouder2 als ouders gecreeerd; de huwelijks- en scheidingsdatum zijn
- * onbekend (null); het gezin krijgt een uniek nummer toegewezen; dit gezin
- * wordt ook bij de afzonderlijke ouders geregistreerd;
- *
- * @param ouder1
- * @param ouder2 mag null zijn
- *
- * @return het nieuwe gezin. null als ouder1 = ouder2 of als een van de volgende
- * voorwaarden wordt overtreden: 1) een van de ouders is op dit moment getrouwd
- * 2) het koppel vormt al een ander gezin
- */
-public Gezin addOngehuwdGezin(Persoon ouder1, Persoon ouder2) {
-        if (ouder1.equals(ouder2)) {
-            return null;
-        }
-
-        if (ongehuwdGezinBestaat(ouder1, ouder2)) {
-            return null;
-        }
-
-        Calendar nu = Calendar.getInstance();
-        if (ouder2 != null) {
-            if (ouder1.isGetrouwdOp(nu) || ouder2.isGetrouwdOp(nu)) {
+                    && p.getGebPlaats().toLowerCase().equals(gebplaats.toLowerCase())
+                    && p.getGebDat().equals(gebdat)) {
                 return null;
             }
         }
 
+        //for (String s : vnamen)
+        //{
+        //   s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
+        //}
+        //anaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
+        //gebplaats = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
+        Persoon newPersoon = new Persoon(nextPersNr, voornamen, anaam,
+                tvoegsel.toLowerCase(), gebdat, gebplaats, geslacht, ouderlijkGezin);
+        nextPersNr++;
+        personen.add(newPersoon);
+
+        if (ouderlijkGezin
+                != null) {
+            ouderlijkGezin.breidUitMet(newPersoon);
+        }
+
+        return newPersoon;
+    }
+
+    /**
+     * er wordt, zo mogelijk (zie return) een (kinderloos) ongehuwd gezin met
+     * ouder1 en ouder2 als ouders gecreeerd; de huwelijks- en scheidingsdatum
+     * zijn onbekend (null); het gezin krijgt een uniek nummer toegewezen; dit
+     * gezin wordt ook bij de afzonderlijke ouders geregistreerd;
+     *
+     * @param ouder1
+     * @param ouder2 mag null zijn
+     *
+     * @return het nieuwe gezin. null als ouder1 = ouder2 of als een van de
+     * volgende voorwaarden wordt overtreden: 1) een van de ouders is op dit
+     * moment getrouwd 2) het koppel vormt al een ander gezin
+     */
+    public Gezin addOngehuwdGezin(Persoon ouder1, Persoon ouder2) {
+        if (ouder1.equals(ouder2)) {
+            return null;
+        }
+
+        Calendar nu = Calendar.getInstance();
+        if (ouder1.isGetrouwdOp(nu) || (ouder2 != null
+                && ouder2.isGetrouwdOp(nu))
+                || ongehuwdGezinBestaat(ouder1, ouder2)) {
+            return null;
+        }
+
         Gezin gezin = new Gezin(nextGezinsNr, ouder1, ouder2);
-        
 
         nextGezinsNr++;
 
@@ -246,27 +228,57 @@ public Gezin addOngehuwdGezin(Persoon ouder1, Persoon ouder2) {
      */
     public Gezin addHuwelijk(Persoon ouder1, Persoon ouder2, Calendar huwdatum) {
         //todo opgave 1
+        Gezin nieuwgezin = null;
 
         if (ouder1.equals(ouder2)) {
             return null;
         }
 
         for (Gezin g : gezinnen) {
-            if (g.getOuder1() == ouder2)
-            
-            if (g.getOuder1().equals(ouder1) && g.getOuder2().equals(ouder2) && g.getHuwelijksdatum() == null) {
-                g.setHuwelijk(huwdatum);
+            if (g.getOuder1().equals(ouder1) || g.getOuder2().equals(ouder1)) {
+                if (g.getHuwelijksdatum() != null && (g.getScheidingsdatum() == null || huwdatum.before(g.getScheidingsdatum()))) {
+                    return null;
+                }
+            }
+            if (g.getOuder1().equals(ouder2) || g.getOuder2().equals(ouder2)) {
+                if (g.getHuwelijksdatum() != null && (g.getScheidingsdatum() == null || huwdatum.before(g.getScheidingsdatum()))) {
+                    return null;
+                }
+            }
+
+            /*if (g.getOuder1().equals(ouder1) && g.getOuder2().equals(ouder2) && g.getHuwelijksdatum() == null) {
+             g.setHuwelijk(huwdatum);
+             }*/
+        }
+        for (Persoon p : personen) {
+            if (p.equals(ouder1)) {
+                nieuwgezin = ouder1.heeftOngehuwdGezinMet(ouder2);
+                if (nieuwgezin != null) {
+                    ouder1.heeftOngehuwdGezinMet(ouder2).setHuwelijk(huwdatum);//ouder1.heeftOngehuwdGezinMet(ouder2).isHuwelijkOp(huwdatum);
+                } else {
+                    nieuwgezin = new Gezin(this.nextGezinsNr, ouder1, ouder2);
+                    nieuwgezin.setHuwelijk(huwdatum);
+
+                    ouder1.wordtOuderIn(nieuwgezin);
+                    ouder2.wordtOuderIn(nieuwgezin);
+
+                    this.gezinnen.add(nieuwgezin);
+                    this.nextGezinsNr++;
+                }
             }
         }
-        if (!ouder1.equals(ouder2) && ouder1.kanTrouwenOp(huwdatum) && ouder2.kanTrouwenOp(huwdatum)) {
-            Gezin g = new Gezin(nextGezinsNr, ouder1, ouder2);
-            g.setScheiding(null);
-            nextGezinsNr++;
-            gezinnen.add(g);
-            return g;
-        } else {
-            return null;
-        }
+        return nieuwgezin;
+
+        /*
+         if (!ouder1.equals(ouder2) && ouder1.kanTrouwenOp(huwdatum) && ouder2.kanTrouwenOp(huwdatum)) {
+         Gezin g = new Gezin(nextGezinsNr, ouder1, ouder2);
+         g.setScheiding(null);
+         nextGezinsNr++;
+         gezinnen.add(g);
+         return g;
+         } else {
+         return null;
+         }*/
     }
 
     /**
