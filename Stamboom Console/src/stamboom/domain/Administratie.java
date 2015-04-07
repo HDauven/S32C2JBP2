@@ -28,6 +28,11 @@ public class Administratie {
         this.personen = new ArrayList<>();
         this.gezinnen = new ArrayList<>();
         this.observableGezinnen = FXCollections.observableList(gezinnen);
+        this.observablePersonen = FXCollections.observableList(personen);
+        observablePersonen.add(new Persoon(0, new String[]{"Jelle"}, "Widdershoven", "", new GregorianCalendar(1980, Calendar.APRIL, 23), "Sittard", Geslacht.MAN, null));
+        observablePersonen.add(new Persoon(1, new String[]{"Piet", "Jacobus"}, "Pietersen", "", new GregorianCalendar(1985, Calendar.MARCH, 11), "Eindhoven", Geslacht.MAN, null));
+        observableGezinnen.add(new Gezin(0, new Persoon(4, new String[]{"Maria"}, "Bruggen", "van", new GregorianCalendar(1983, Calendar.APRIL, 29), "Veldhoven", Geslacht.VROUW, null), new Persoon(5, new String[]{"Sjaak"}, "Oranje", "van", new GregorianCalendar(1983, Calendar.APRIL, 24), "Eindhoven", Geslacht.MAN, null)));
+        observableGezinnen.add(new Gezin(0, new Persoon(2, new String[]{"Chiara"}, "Widdershoven", "", new GregorianCalendar(1980, Calendar.APRIL, 23), "Sittard", Geslacht.VROUW, null), new Persoon(3, new String[]{"Jelle"}, "Widdershoven", "", new GregorianCalendar(1980, Calendar.APRIL, 23), "Sittard", Geslacht.MAN, null)));
     }
 
     //**********************methoden****************************************
@@ -66,10 +71,11 @@ public class Administratie {
         for (String voornaam : vnamen) {
             if (voornaam.trim().isEmpty()) {
                 throw new IllegalArgumentException("lege voornaam is niet toegestaan");
-            } else 
+            } else {
                 voornamen[Arrays.asList(vnamen).indexOf(voornaam)] = voornaam.substring(0, 1).toUpperCase() + voornaam.substring(1).toLowerCase();
-               //voornaam = voornaam.substring(0, 1).toUpperCase() + voornaam.substring(1).toLowerCase();
             }
+            //voornaam = voornaam.substring(0, 1).toUpperCase() + voornaam.substring(1).toLowerCase();
+        }
 
         // Formatteerd de achternaam van een persoon
         if (anaam.trim().isEmpty()) {
