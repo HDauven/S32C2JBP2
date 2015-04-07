@@ -203,7 +203,7 @@ public class StamboomFXController extends StamboomController implements Initiali
         // todo opgave 3
         Administratie admin = new Administratie();
         if (tfVoornamenInvoer.getText().equals("") || tfAchternaamInvoer.getText().equals("") || tfGebdatumInvoer.getText().equals("") || tfGebplaatsInvoer.getText().equals("") || cbGeslachtInvoer.getSelectionModel().getSelectedItem() == null) {
-            showDialog("Warning", "Vul voornamen, achternaam, gebdatum, gebplaats en geslacht in.");
+            showDialog("Warning", "Vul voornamen, achternaam, gebdatum, gebplaats en geslacht in!");
         } else {
             Calendar gebDatum = null;
             try {
