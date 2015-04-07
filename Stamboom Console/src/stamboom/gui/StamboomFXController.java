@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -158,8 +159,13 @@ public class StamboomFXController extends StamboomController implements Initiali
             tfGezinsNr.setText(gezin.getNr() + "");
             tfGezinOuder1.setText(gezin.getOuder1().getNaam());
             tfGezinOuder2.setText(gezin.getOuder2().getNaam());
-            tfGezinHuwelijksdatum.setText(gezin.getHuwelijksdatum().toString());
-            tfGezinScheidingsdatum.setText(gezin.getScheidingsdatum().toString());
+            if (gezin.getHuwelijksdatum() == null || gezin.getScheidingsdatum() == null) {
+                tfGezinHuwelijksdatum.setText("");
+                tfGezinScheidingsdatum.setText("");
+            } else {
+                tfGezinHuwelijksdatum.setText(gezin.getHuwelijksdatum().toString());
+                tfGezinScheidingsdatum.setText(gezin.getScheidingsdatum().toString());
+            }
             lvGezinKinderen.setItems(gezin.getKinderen());
         }
     }
@@ -167,7 +173,7 @@ public class StamboomFXController extends StamboomController implements Initiali
     public void setHuwdatum(Event evt) {
         // todo opgave 3
         Administratie admin = new Administratie();
-        if (cbGezinnen.getSelectionModel().getSelectedItem() != null) {
+        if (cbGezinnen.getSelectionModel().getSelectedItem() != null || !tfGezinSetHuwelijksdatum.getText().equals("")) {
             Gezin gezin = (Gezin) cbGezinnen.getSelectionModel().getSelectedItem();
             Calendar huwelijksdatum = StringUtilities.datum(tfGezinSetHuwelijksdatum.getText());
             admin.setHuwelijk(gezin, huwelijksdatum);
@@ -179,7 +185,7 @@ public class StamboomFXController extends StamboomController implements Initiali
     public void setScheidingsdatum(Event evt) {
         // todo opgave 3
         Administratie admin = new Administratie();
-        if (cbGezinnen.getSelectionModel().getSelectedItem() != null) {
+        if (cbGezinnen.getSelectionModel().getSelectedItem() != null || !tfGezinSetScheidingsdatum.getText().equals("")) {
             Gezin gezin = (Gezin) cbGezinnen.getSelectionModel().getSelectedItem();
             Calendar scheidingsdatum = StringUtilities.datum(tfGezinSetScheidingsdatum.getText());
             admin.setScheiding(gezin, scheidingsdatum);
@@ -207,11 +213,12 @@ public class StamboomFXController extends StamboomController implements Initiali
             }
 
             if (gebDatum != null) {
+
                 String[] voornamen = tfVoornamenInvoer.getText().split("\\s");
 
                 Geslacht geslacht = (Geslacht) cbGeslachtInvoer.getSelectionModel().getSelectedItem();
                 Gezin ouderlijkGezin = (Gezin) cbOuderlijkGezinInvoer.getSelectionModel().getSelectedItem();
-                if (cbOuderlijkGezinInvoer.getSelectionModel().getSelectedItem() != null) {
+                if (ouderlijkGezin != null) {
                     admin.addPersoon(geslacht, voornamen, tfAchternaamInvoer.getText(), tfTussenvoegselInvoer.getText(), gebDatum, tfGebplaatsInvoer.getText(), ouderlijkGezin);
                 } else {
                     admin.addPersoon(geslacht, voornamen, tfAchternaamInvoer.getText(), tfTussenvoegselInvoer.getText(), gebDatum, tfGebplaatsInvoer.getText(), null);
@@ -322,7 +329,7 @@ public class StamboomFXController extends StamboomController implements Initiali
         //todo opgave 3
         tfVoornamenInvoer.clear();
         tfAchternaamInvoer.clear();
-        tfTussenvoegsel.clear();
+        tfTussenvoegselInvoer.clear();
         tfGebdatumInvoer.clear();
         tfGebplaatsInvoer.clear();
         cbGeslachtInvoer.getSelectionModel().clearSelection();

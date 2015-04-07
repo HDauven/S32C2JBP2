@@ -62,7 +62,7 @@
                                                                 <Label alignment="CENTER_RIGHT" graphicTextGap="4.0" prefWidth="-1.0" text="GebPlaats" textAlignment="RIGHT" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x3" GridPane.rowIndex="6" />
                                                                 <Label alignment="CENTER_RIGHT" graphicTextGap="4.0" prefWidth="-1.0" text="Ouderlijk Gezin" textAlignment="RIGHT" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x3" GridPane.rowIndex="7" />
                                                                 <TextField id="tfPersoonNr" fx:id="tfVoornamen" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                                <TextField id="tfPersoonNr" fx:id="tfTusenvoegsel" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                                <TextField id="tfPersoonNr" fx:id="tfTussenvoegsel" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                                 <TextField id="tfPersoonNr" fx:id="tfAchternaam" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                                                 <Label alignment="CENTER_RIGHT" graphicTextGap="4.0" prefWidth="-1.0" text="Betrokken Bij" textAlignment="RIGHT" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.margin="$x3" GridPane.rowIndex="8" />
                                                                 <ComboBox fx:id="cbOuderlijkGezin" onAction="#setOuders" prefWidth="400.0" promptText="Kies (zo mogelijk) het ouderlijk gezin" GridPane.columnIndex="1" GridPane.rowIndex="7">
@@ -209,7 +209,7 @@
                                                 <Label text="ouderlijkGezin" GridPane.rowIndex="6" />
                                                 <TextField fx:id="tfVoornamenInvoer" GridPane.columnIndex="1" />
                                                 <TextField fx:id="tfAchternaamInvoer" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <TextField fx:id="tfTussenvoegselinvoer" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <TextField fx:id="tfTussenvoegselInvoer" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                 <TextField fx:id="tfGebdatumInvoer" promptText="dd-mm-jjjj" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                                 <TextField fx:id="tfGebplaatsInvoer" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                                 <ComboBox fx:id="cbGeslachtInvoer" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
