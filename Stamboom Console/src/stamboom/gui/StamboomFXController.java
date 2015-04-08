@@ -175,24 +175,26 @@ public class StamboomFXController extends StamboomController implements Initiali
     public void setHuwdatum(Event evt) {
         // todo opgave 3
         Administratie admin = new Administratie();
-        if (cbGezinnen.getSelectionModel().getSelectedItem() != null || !tfGezinSetHuwelijksdatum.getText().equals("")) {
+        if (cbGezinnen.getSelectionModel().getSelectedItem() != null && !tfGezinSetHuwelijksdatum.getText().isEmpty()) {
             Gezin gezin = (Gezin) cbGezinnen.getSelectionModel().getSelectedItem();
             Calendar huwelijksdatum = StringUtilities.datum(tfGezinSetHuwelijksdatum.getText());
             admin.setHuwelijk(gezin, huwelijksdatum);
+            showDialog("Succes", "De huwelijksdatum van dit gezin is veranderd naar: " + gezin.getHuwelijksdatum().toString());
         } else {
-            showDialog("Warning", "Kies een gezin.");
+            showDialog("Warning", "Kies een gezin en vul een huwelijksdatum in.");
         }
     }
 
     public void setScheidingsdatum(Event evt) {
         // todo opgave 3
         Administratie admin = new Administratie();
-        if (cbGezinnen.getSelectionModel().getSelectedItem() != null || !tfGezinSetScheidingsdatum.getText().equals("")) {
+        if (cbGezinnen.getSelectionModel().getSelectedItem() != null && !tfGezinSetScheidingsdatum.getText().isEmpty()) {
             Gezin gezin = (Gezin) cbGezinnen.getSelectionModel().getSelectedItem();
             Calendar scheidingsdatum = StringUtilities.datum(tfGezinSetScheidingsdatum.getText());
             admin.setScheiding(gezin, scheidingsdatum);
+            showDialog("Succes", "De scheidingsdatum van dit gezin is veranderd naar: " + gezin.getScheidingsdatum().toString());
         } else {
-            showDialog("Warning", "Kies een gezin.");
+            showDialog("Warning", "Kies een gezin en vul een scheidingsdatum in.");
         }
     }
 
@@ -222,8 +224,10 @@ public class StamboomFXController extends StamboomController implements Initiali
                 Gezin ouderlijkGezin = (Gezin) cbOuderlijkGezinInvoer.getSelectionModel().getSelectedItem();
                 if (ouderlijkGezin != null) {
                     admin.addPersoon(geslacht, voornamen, tfAchternaamInvoer.getText(), tfTussenvoegselInvoer.getText(), gebDatum, tfGebplaatsInvoer.getText(), ouderlijkGezin);
+                    showDialog("Succes", "De nieuwe persoon is toegevoegd aan de administratie!");
                 } else {
                     admin.addPersoon(geslacht, voornamen, tfAchternaamInvoer.getText(), tfTussenvoegselInvoer.getText(), gebDatum, tfGebplaatsInvoer.getText(), null);
+                    showDialog("Succes", "De nieuwe persoon is toegevoegd aan de administratie!");
                 }
             } else {
                 showDialog("Warning", "Vul een geldige geboortedatum in.");
@@ -272,6 +276,7 @@ public class StamboomFXController extends StamboomController implements Initiali
             if (g == null) {
                 showDialog("Warning", "Invoer ongehuwd gezin is niet geaccepteerd");
             }
+            showDialog("Succes", "Het nieuwe gezin is toegevoegd aan de administratie!");
         }
 
         clearTabGezinInvoer();
@@ -287,7 +292,7 @@ public class StamboomFXController extends StamboomController implements Initiali
             Persoon persoon = (Persoon) cbPersonen.getSelectionModel().getSelectedItem();
             showDialog("Stamboom", persoon.stamboomAlsString());
         } else {
-            showDialog("Warning", "Selecteert een persoon.");
+            showDialog("Warning", "Selecteer een persoon.");
         }
     }
 
