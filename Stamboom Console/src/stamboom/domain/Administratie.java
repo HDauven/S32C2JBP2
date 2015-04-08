@@ -138,7 +138,7 @@ public class Administratie implements Serializable {
      * moment getrouwd 2) het koppel vormt al een ander gezin
      */
     public Gezin addOngehuwdGezin(Persoon ouder1, Persoon ouder2) {
-        if (ouder1.equals(ouder2)) {
+        if (ouder1 == ouder2) {
             return null;
         }
 
@@ -150,9 +150,7 @@ public class Administratie implements Serializable {
         }
 
         Gezin gezin = new Gezin(nextGezinsNr, ouder1, ouder2);
-
         nextGezinsNr++;
-
         gezinnen.add(gezin);
 
         ouder1.wordtOuderIn(gezin);
@@ -254,7 +252,7 @@ public class Administratie implements Serializable {
             if (p.equals(ouder1)) {
                 nieuwgezin = ouder1.heeftOngehuwdGezinMet(ouder2);
                 if (nieuwgezin != null) {
-                    ouder1.heeftOngehuwdGezinMet(ouder2).setHuwelijk(huwdatum);//ouder1.heeftOngehuwdGezinMet(ouder2).isHuwelijkOp(huwdatum);
+                    ouder1.heeftOngehuwdGezinMet(ouder2).setHuwelijk(huwdatum);
                 } else {
                     nieuwgezin = new Gezin(this.nextGezinsNr, ouder1, ouder2);
                     nieuwgezin.setHuwelijk(huwdatum);

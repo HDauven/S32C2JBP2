@@ -261,7 +261,7 @@ public class Persoon {
      */
     public boolean isGetrouwdOp(Calendar datum) {
         for (Gezin g : this.getAlsOuderBetrokkenIn()) {
-            if (g.getHuwelijksdatum().equals(datum)) {
+            if (g.heeftGetrouwdeOudersOp(datum)) {
                 return true;
             }
         }
