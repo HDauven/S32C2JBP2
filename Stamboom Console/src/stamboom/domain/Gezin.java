@@ -199,12 +199,10 @@ public class Gezin {
         if (this.ouder2 != null) {
             beschrijving.append(" met ").append(this.ouder2.getNaam());
         }
-        
         if (this.huwelijksdatum != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("d-M-yyyy");
             beschrijving.append(" ").append(sdf.format(this.huwelijksdatum.getTime()));
         }
-        
         if (!this.kinderen.isEmpty()) {
             beschrijving.append("; kinderen:").append(bouwkinderen());
         }
@@ -301,6 +299,11 @@ public class Gezin {
      */
     public boolean heeftGescheidenOudersOp(Calendar datum) {
         //todo opgave 1
+        if(this.scheidingsdatum == null)
+        {
+            return false;
+        }
+        
         if (this.scheidingsdatum.before(datum) || this.scheidingsdatum.equals(datum)) {
             return true;
         }
