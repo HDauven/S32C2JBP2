@@ -243,15 +243,33 @@ public class Persoon {
      */
     public Gezin heeftOngehuwdGezinMet(Persoon andereOuder) {
         //todo opgave 1
+        Gezin gezin = null;
         if (andereOuder != null)
         {
-            for (Gezin g : andereOuder.getAlsOuderBetrokkenIn()) {
-                if (g.isOngehuwd()) {
-                    return this.ouderlijkGezin;
+            for (Gezin g : getAlsOuderBetrokkenIn()) {
+                if (g.getOuder1().equals(andereOuder) || (g.getOuder2() != null && g.getOuder2().equals(andereOuder))) {
+                    if (g.isOngehuwd()) {
+                        gezin = g;
+                    }
+                }
+            }
+        } else {
+            for (Gezin g : alsOuderBetrokkenIn) {
+                Persoon persoon;
+                if (g.getOuder1().equals(this)) {
+                    persoon = g.getOuder2();
+                    if (persoon.heeftOngehuwdGezinMet(this) != null) {
+                        gezin = persoon.heeftOngehuwdGezinMet(this);
+                    }
+                } else if (gezin.getOuder2().equals(this)) {
+                    persoon = g.getOuder1();
+                    if (persoon.heeftOngehuwdGezinMet(this) != null) {
+                        gezin = persoon.heeftOngehuwdGezinMet(this);
+                    }
                 }
             }
         }
-        return null;
+        return gezin;
     }
 
     /**
@@ -260,7 +278,7 @@ public class Persoon {
      * @return true als persoon op datum getrouwd is, anders false
      */
     public boolean isGetrouwdOp(Calendar datum) {
-        for (Gezin g : this.getAlsOuderBetrokkenIn()) {
+        for (Gezin g : getAlsOuderBetrokkenIn()) {
             if (g.heeftGetrouwdeOudersOp(datum)) {
                 return true;
             }
