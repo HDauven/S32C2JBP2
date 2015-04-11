@@ -31,7 +31,8 @@ public class SerializationMediator implements IStorageMediator {
      * creation of a non configured serialization mediator
      */
     public SerializationMediator() {
-        props = null;
+        props = new Properties();
+        props.setProperty("file", System.getProperty("user.dir") + "\\test.txt");
     }
 
     @Override

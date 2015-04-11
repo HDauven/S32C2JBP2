@@ -1,5 +1,8 @@
 package stamboom.domain;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import javafx.beans.property.LongProperty;
@@ -8,21 +11,21 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import stamboom.util.StringUtilities;
 
-public class Gezin {
+public class Gezin implements Serializable {
 
     // *********datavelden*************************************
     private final int nr;
     private final Persoon ouder1;
     private final Persoon ouder2;
     private final List<Persoon> kinderen;
-    private ObservableList<Persoon> observableKinderen;
+    private transient ObservableList<Persoon> observableKinderen;
     /**
      * kan onbekend zijn (dan is het een ongehuwd gezin):
      */
     private Calendar huwelijksdatum;
     /**
-     * kan null zijn; als huwelijksdatum null is, dan zal scheidingsdatum ook null
-     * zijn; Als huwelijksdatum en scheidingsdatum bekend zijn, dan zal de
+     * kan null zijn; als huwelijksdatum null is, dan zal scheidingsdatum ook
+     * null zijn; Als huwelijksdatum en scheidingsdatum bekend zijn, dan zal de
      * scheidingsdatum na het huewelijk zijn.
      */
     private Calendar scheidingsdatum;
@@ -33,11 +36,17 @@ public class Gezin {
      * geregistreerd; de huwelijks-(en scheidings)datum zijn onbekend (null);
      * het gezin krijgt gezinsNr als nummer;
      *
-     * @param ouder1 mag niet null zijn, moet al geboren zijn,
-     * en mag geen famillie van ouder2 zijn.
-     * @param ouder2 ongelijk aan ouder1, moet al geboren zijn,
-     * en mag geen familie van ouder1 zijn.
+     * @param ouder1 mag niet null zijn, moet al geboren zijn, en mag geen
+     * famillie van ouder2 zijn.
+     * @param ouder2 ongelijk aan ouder1, moet al geboren zijn, en mag geen
+     * familie van ouder1 zijn.
      */
+    private void readObject(ObjectInputStream ois)
+            throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        observableKinderen = FXCollections.observableList(kinderen);
+    }
+
     Gezin(int gezinsNr, Persoon ouder1, Persoon ouder2) {
         if (ouder1 == null) {
             throw new RuntimeException("Eerste ouder mag niet null zijn");
@@ -55,14 +64,13 @@ public class Gezin {
                 throw new RuntimeException("ouder 1 is familie van ouder 2");
             }
         }
-        if (ouder1.getGebDat().compareTo(Calendar.getInstance()) > 0){
+        if (ouder1.getGebDat().compareTo(Calendar.getInstance()) > 0) {
             throw new RuntimeException("ouder1 moet nog geboren worden");
         }
-        if (ouder2 != null && ouder2.getGebDat().compareTo(Calendar.getInstance()) > 0)
-        {
+        if (ouder2 != null && ouder2.getGebDat().compareTo(Calendar.getInstance()) > 0) {
             throw new RuntimeException("ouder2 moet nog geboren worden");
         }
-        
+
         this.nr = gezinsNr;
         this.ouder1 = ouder1;
         this.ouder2 = ouder2;
@@ -113,8 +121,8 @@ public class Gezin {
     /**
      *
      * @return het nr, de naam van de eerste ouder, gevolgd door de naam van de
-     * eventuele tweede ouder. Als dit gezin getrouwd is, wordt ook de huwelijksdatum
-     * vermeld.
+     * eventuele tweede ouder. Als dit gezin getrouwd is, wordt ook de
+     * huwelijksdatum vermeld.
      */
     @Override
     public String toString() {
@@ -173,10 +181,8 @@ public class Gezin {
      */
     boolean setHuwelijk(Calendar datum) {
         //todo opgave 1
-        if (this.isOngehuwd() == true)
-        {
-            if (ouder1.kanTrouwenOp(datum) && ouder2.kanTrouwenOp(datum))
-            {
+        if (this.isOngehuwd() == true) {
+            if (ouder1.kanTrouwenOp(datum) && ouder2.kanTrouwenOp(datum)) {
                 this.huwelijksdatum = datum;
                 return true;
             }
@@ -185,17 +191,17 @@ public class Gezin {
     }
 
     /**
-     * @return het gezinsnummer, gevolgd door de namen van de ouder(s),
-     * de eventueel bekende huwelijksdatum, (als er kinderen zijn)
-     * de constante tekst '; kinderen:', en de voornamen van de
-     * kinderen uit deze relatie (per kind voorafgegaan door ' -')
+     * @return het gezinsnummer, gevolgd door de namen van de ouder(s), de
+     * eventueel bekende huwelijksdatum, (als er kinderen zijn) de constante
+     * tekst '; kinderen:', en de voornamen van de kinderen uit deze relatie
+     * (per kind voorafgegaan door ' -')
      */
     public String beschrijving() {
         //todo opgave 1
-        StringBuilder beschrijving = new StringBuilder();       
-        
+        StringBuilder beschrijving = new StringBuilder();
+
         beschrijving.append(this.nr).append(" ").append(this.ouder1.getNaam());
-        
+
         if (this.ouder2 != null) {
             beschrijving.append(" met ").append(this.ouder2.getNaam());
         }
@@ -206,15 +212,14 @@ public class Gezin {
         if (!this.kinderen.isEmpty()) {
             beschrijving.append("; kinderen:").append(bouwkinderen());
         }
-        
+
         return beschrijving.toString();
     }
-    
+
     // Helper methode die de lijst met kinderen opbouwt.
     private String bouwkinderen() {
-        String lijstMetKinderen = ""; 
-        for (Persoon p : kinderen)
-        {
+        String lijstMetKinderen = "";
+        for (Persoon p : kinderen) {
             lijstMetKinderen += " -" + p.getVoornamen();
         }
         return lijstMetKinderen;
@@ -275,13 +280,11 @@ public class Gezin {
         //todo opgave 1
         if (this.huwelijksdatum == null || datum == null) {
             return false;
-        }
-        else if (this.huwelijksdatum.before(datum) || this.huwelijksdatum.equals(datum))
-        {
+        } else if (this.huwelijksdatum.before(datum) || this.huwelijksdatum.equals(datum)) {
             return true;
-        }
-        else 
+        } else {
             return false;
+        }
     }
 
     /**
@@ -299,14 +302,13 @@ public class Gezin {
      */
     public boolean heeftGescheidenOudersOp(Calendar datum) {
         //todo opgave 1
-        if(this.scheidingsdatum == null)
-        {
+        if (this.scheidingsdatum == null) {
             return false;
         }
-        
+
         if (this.scheidingsdatum.before(datum) || this.scheidingsdatum.equals(datum)) {
             return true;
         }
-         return false;
+        return false;
     }
 }

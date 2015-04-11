@@ -1,5 +1,8 @@
 package stamboom.domain;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -11,7 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import stamboom.util.StringUtilities;
 
-public class Persoon {
+public class Persoon implements Serializable {
 
     // ********datavelden**************************************
     private final int nr;
@@ -23,7 +26,7 @@ public class Persoon {
     private Gezin ouderlijkGezin;
     private final List<Gezin> alsOuderBetrokkenIn;
     private final Geslacht geslacht;
-    private ObservableList<Gezin> observableAlsOuderBetrokkenIn;
+    private transient ObservableList<Gezin> observableAlsOuderBetrokkenIn;
 
     // ********constructoren***********************************
     /**
@@ -36,21 +39,26 @@ public class Persoon {
      * geconverteerd naar kleine letters.
      *
      */
+    private void readObject(ObjectInputStream ois)
+            throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        observableAlsOuderBetrokkenIn = FXCollections.observableList(alsOuderBetrokkenIn);
+    }
+
     Persoon(int persNr, String[] vnamen, String anaam, String tvoegsel,
             Calendar gebdat, String gebplaats, Geslacht g, Gezin ouderlijkGezin) {
         //todo opgave 
         this.voornamen = new String[vnamen.length];
-        for (String voornaam : vnamen)
-        {
+        for (String voornaam : vnamen) {
             voornamen[Arrays.asList(vnamen).indexOf(voornaam)] = voornaam.substring(0, 1).toUpperCase() + voornaam.substring(1).toLowerCase();
             //voornaam = voornaam.substring(0,1).toUpperCase() + voornaam.substring(1).toLowerCase();
         }
         this.nr = persNr;
         //this.voornamen = vnamen;
-        this.achternaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
+        this.achternaam = anaam.substring(0, 1).toUpperCase() + anaam.substring(1).toLowerCase();
         this.tussenvoegsel = tvoegsel.toLowerCase();
         this.gebDat = gebdat;
-        this.gebPlaats = gebplaats.substring(0,1).toUpperCase() + gebplaats.substring(1).toLowerCase();
+        this.gebPlaats = gebplaats.substring(0, 1).toUpperCase() + gebplaats.substring(1).toLowerCase();
         this.ouderlijkGezin = ouderlijkGezin;
         this.alsOuderBetrokkenIn = new ArrayList<>();
         this.geslacht = g;
@@ -96,8 +104,7 @@ public class Persoon {
     public String getInitialen() {
         //todo opgave 1
         String initialen = "";
-        for (String s : voornamen)
-        {
+        for (String s : voornamen) {
             initialen = initialen + s.substring(0, 1) + ".";
         }
         return initialen;
@@ -113,12 +120,9 @@ public class Persoon {
         //todo opgave 1
         String naam = "";
         String initialen = getInitialen();
-        if (tussenvoegsel.equals(""))
-        {
+        if (tussenvoegsel.equals("")) {
             naam = initialen + " " + achternaam;
-        }
-        else if (tussenvoegsel != null)
-        {
+        } else if (tussenvoegsel != null) {
             naam = initialen + " " + tussenvoegsel + " " + achternaam;
         }
         return naam;
@@ -187,8 +191,7 @@ public class Persoon {
      */
     boolean setOuders(Gezin ouderlijkGezin) {
         //todo opgave 1
-        if (this.ouderlijkGezin == null)
-        {
+        if (this.ouderlijkGezin == null) {
             ouderlijkGezin.breidUitMet(this);
             this.ouderlijkGezin = ouderlijkGezin;
             return true;
@@ -244,8 +247,7 @@ public class Persoon {
     public Gezin heeftOngehuwdGezinMet(Persoon andereOuder) {
         //todo opgave 1
         Gezin gezin = null;
-        if (andereOuder != null)
-        {
+        if (andereOuder != null) {
             for (Gezin g : getAlsOuderBetrokkenIn()) {
                 if (g.getOuder1().equals(andereOuder) || (g.getOuder2() != null && g.getOuder2().equals(andereOuder))) {
                     if (g.isOngehuwd()) {
@@ -285,24 +287,23 @@ public class Persoon {
         }
         return false;
     }
+
     /**
      *
      * @param datum
      * @return true als de persoon kan trouwen op datum, hierbij wordt rekening
-     * gehouden met huwelijken in het verleden en in de toekomst
-     * Alleen meerderjarige (18+) personen kunnen trouwen.
+     * gehouden met huwelijken in het verleden en in de toekomst Alleen
+     * meerderjarige (18+) personen kunnen trouwen.
      */
     public boolean kanTrouwenOp(Calendar datum) {
-        
-        Calendar meerderjarigDatum = ((GregorianCalendar)this.gebDat.clone());
+
+        Calendar meerderjarigDatum = ((GregorianCalendar) this.gebDat.clone());
         meerderjarigDatum.add(Calendar.YEAR, 18);
-        if(datum.compareTo(meerderjarigDatum) < 1){
+        if (datum.compareTo(meerderjarigDatum) < 1) {
             return false;
         }
-        for (Gezin gezin : alsOuderBetrokkenIn) 
-        {
-            if (gezin.heeftGetrouwdeOudersOp(datum)) 
-            {
+        for (Gezin gezin : alsOuderBetrokkenIn) {
+            if (gezin.heeftGetrouwdeOudersOp(datum)) {
                 return false;
             } else {
                 Calendar huwdatum = gezin.getHuwelijksdatum();
@@ -312,7 +313,7 @@ public class Persoon {
             }
         }
         return true;
- 
+
     }
 
     /**
@@ -322,13 +323,10 @@ public class Persoon {
      */
     public boolean isGescheidenOp(Calendar datum) {
         //todo opgave 1
-        if (alsOuderBetrokkenIn != null)
-        {
-            for (Gezin gezin : alsOuderBetrokkenIn)
-            {
-                if (gezin.getScheidingsdatum().equals(datum) 
-                        && gezin.getScheidingsdatum().before(datum))
-                {
+        if (alsOuderBetrokkenIn != null) {
+            for (Gezin gezin : alsOuderBetrokkenIn) {
+                if (gezin.getScheidingsdatum().equals(datum)
+                        && gezin.getScheidingsdatum().before(datum)) {
                     return true;
                 }
             }
@@ -344,48 +342,40 @@ public class Persoon {
      * @return het aantal personen in de stamboom van deze persoon (ouders,
      * grootouders etc); de persoon zelf telt ook mee
      */
-    
     // Helper methode die nodig is om de grootte van een gezin te achterhalen.
-      private Gezin mapIndex(HashMap<Gezin, Integer> hMap, int index)
-      {
+    private Gezin mapIndex(HashMap<Gezin, Integer> hMap, int index) {
         return (Gezin) hMap.keySet().toArray()[index];
-     }   
-    
+    }
+
     public int afmetingStamboom() {
         //todo opgave 2
         int aantalMensen = 0;
-        
+
         HashMap<Gezin, Integer> gezinnen = new HashMap<Gezin, Integer>();
         gezinnen.put(ouderlijkGezin, 0);
-        
-        while(gezinnen.size() > 0) 
-        {           
+
+        while (gezinnen.size() > 0) {
             int i = gezinnen.size() - 1;
             Gezin g = mapIndex(gezinnen, i);
-            
-            if (gezinnen.get(mapIndex(gezinnen, i)) == 0) 
-            {
+
+            if (gezinnen.get(mapIndex(gezinnen, i)) == 0) {
                 gezinnen.put(g, 1);
-                
-                if (g.getOuder1().getOuderlijkGezin() != null) 
-                {  
-                    gezinnen.put(g.getOuder1().getOuderlijkGezin(), 0);                         
-                } 
+
+                if (g.getOuder1().getOuderlijkGezin() != null) {
+                    gezinnen.put(g.getOuder1().getOuderlijkGezin(), 0);
+                }
                 aantalMensen += 1;
 
-            } 
-            else if (gezinnen.get(mapIndex(gezinnen, i)) == 1) 
-            {
-                if (g.getOuder2() != null && g.getOuder2().getOuderlijkGezin() != null) 
-                {                    
-                    gezinnen.put(g.getOuder2().getOuderlijkGezin(), 0);     
-                } 
+            } else if (gezinnen.get(mapIndex(gezinnen, i)) == 1) {
+                if (g.getOuder2() != null && g.getOuder2().getOuderlijkGezin() != null) {
+                    gezinnen.put(g.getOuder2().getOuderlijkGezin(), 0);
+                }
                 aantalMensen += 1;
 
                 gezinnen.remove(g);
             }
         }
-        
+
         return aantalMensen;
     }
 
@@ -405,28 +395,25 @@ public class Persoon {
         //todo opgave 2
         //Voegt een persoon toe aan zijn stamboom
         pmg.add(new PersoonMetGeneratie((standaardgegevens()), g));
-        
+
         // Extra check die de ouders van een persoon op null zet,
         // en vervolgens via het ouderlijk gezin kijkt of deze bekend zijn
         // of niet.
         Persoon ouder1 = null;
         Persoon ouder2 = null;
-        
-        if (getOuderlijkGezin() != null) 
-        {
+
+        if (getOuderlijkGezin() != null) {
             ouder1 = getOuderlijkGezin().getOuder1();
             ouder2 = getOuderlijkGezin().getOuder2();
         }
-        
-        if (ouder1 != null)
-        {
+
+        if (ouder1 != null) {
             ouder1.voegJouwStamboomToe(pmg, g + 1);
         }
-        
-        if (ouder2 != null)
-        {
+
+        if (ouder2 != null) {
             ouder2.voegJouwStamboomToe(pmg, g + 1);
-        }       
+        }
     }
 
     /**
@@ -456,16 +443,14 @@ public class Persoon {
         StringBuilder builder = new StringBuilder();
         //todo opgave 2
         ArrayList<PersoonMetGeneratie> pmg = new ArrayList<>();
-        
+
         voegJouwStamboomToe(pmg, 0);
-        
-        for (PersoonMetGeneratie p : pmg)
-        {
-            for (int i = 0; 1 < p.getGeneratie(); i++)
-            {
+
+        for (PersoonMetGeneratie p : pmg) {
+            for (int i = 0; 1 < p.getGeneratie(); i++) {
                 builder.append("  ");
             }
-            
+
             String pGegevens = p.getPersoonsgegevens().trim() + "\n";
             builder.append(pGegevens);
         }

@@ -4,10 +4,14 @@
  */
 package stamboom.gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +22,7 @@ import stamboom.domain.Administratie;
 import stamboom.domain.Geslacht;
 import stamboom.domain.Gezin;
 import stamboom.domain.Persoon;
+import stamboom.storage.SerializationMediator;
 import stamboom.util.StringUtilities;
 
 /**
@@ -80,10 +85,18 @@ public class StamboomFXController extends StamboomController implements Initiali
     @FXML TextField tfGezinSetHuwelijksdatum;
     @FXML TextField tfGezinSetScheidingsdatum;
     @FXML ListView lvGezinKinderen;
+    
+    //STAMBOOM
+    @FXML Button btnCreateStamboom;
+    @FXML Button btnSaveStamboom;
+    @FXML Button btnOpenStamboom;
+    @FXML TextField tfStamboom;
+    @FXML ComboBox cbPersonenStamboom;
 
     //opgave 4
     private boolean withDatabase;
-
+    private Administratie admin = new Administratie();
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initComboboxes();
@@ -92,16 +105,16 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     private void initComboboxes() {
         //todo opgave 3 
-        Administratie admin = new Administratie();
         cbOuderlijkGezinInvoer.setItems(admin.getGezinnen());
         cbOuder1Invoer.setItems(admin.getPersonen());
         cbOuder2Invoer.setItems(admin.getPersonen());
         cbGezinnen.setItems(admin.getGezinnen());
         cbOuderlijkGezin.setItems(admin.getGezinnen());
         cbPersonen.setItems(admin.getPersonen());
+        cbPersonenStamboom.setItems(admin.getPersonen());
         cbGeslachtInvoer.getItems().addAll(Geslacht.MAN, Geslacht.VROUW);
     }
-
+    
     public void selectPersoon(Event evt) {
         Persoon persoon = (Persoon) cbPersonen.getSelectionModel().getSelectedItem();
         showPersoon(persoon);
@@ -174,7 +187,6 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     public void setHuwdatum(Event evt) {
         // todo opgave 3
-        Administratie admin = new Administratie();
         if (cbGezinnen.getSelectionModel().getSelectedItem() != null && !tfGezinSetHuwelijksdatum.getText().isEmpty()) {
             Gezin gezin = (Gezin) cbGezinnen.getSelectionModel().getSelectedItem();
             Calendar huwelijksdatum = StringUtilities.datum(tfGezinSetHuwelijksdatum.getText());
@@ -187,7 +199,6 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     public void setScheidingsdatum(Event evt) {
         // todo opgave 3
-        Administratie admin = new Administratie();
         if (cbGezinnen.getSelectionModel().getSelectedItem() != null && !tfGezinSetScheidingsdatum.getText().isEmpty()) {
             Gezin gezin = (Gezin) cbGezinnen.getSelectionModel().getSelectedItem();
             Calendar scheidingsdatum = StringUtilities.datum(tfGezinSetScheidingsdatum.getText());
@@ -205,7 +216,6 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     public void okPersoonInvoer(Event evt) {
         // todo opgave 3
-        Administratie admin = new Administratie();
         if (tfVoornamenInvoer.getText().equals("") || tfAchternaamInvoer.getText().equals("") || tfGebdatumInvoer.getText().equals("") || tfGebplaatsInvoer.getText().equals("") || cbGeslachtInvoer.getSelectionModel().getSelectedItem() == null) {
             showDialog("Warning", "Vul voornamen, achternaam, gebdatum, gebplaats en geslacht in!");
         } else {
@@ -304,12 +314,32 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     public void openStamboom(Event evt) {
         // todo opgave 3
-
+        if (cbPersonenStamboom.getSelectionModel().getSelectedItem() == null)
+        {
+            showDialog("Warning", "Selecteer een persoon.");
+            return;
+        }
+        
+        SerializationMediator sm = new SerializationMediator();
+        try {
+            Persoon persoon = (Persoon) cbPersonenStamboom.getSelectionModel().getSelectedItem();
+            Administratie geladenAdmin = sm.load();
+            tfStamboom.clear();
+            tfStamboom.setText(persoon.stamboomAlsString());
+        } catch (IOException ex) {
+            Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void saveStamboom(Event evt) {
         // todo opgave 3
-
+        SerializationMediator sm = new SerializationMediator();
+        try {
+            sm.save(admin);
+        } catch (IOException ex) {
+            Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        showDialog("Succes", "De administratie is opgeslagen!");
     }
 
     public void closeApplication(Event evt) {

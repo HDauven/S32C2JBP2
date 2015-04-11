@@ -1,5 +1,7 @@
 package stamboom.domain;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
 import javafx.collections.FXCollections;
@@ -12,8 +14,8 @@ public class Administratie implements Serializable {
     private int nextPersNr;
     private final List<Persoon> personen;
     private final List<Gezin> gezinnen;
-    private ObservableList<Gezin> observableGezinnen;
-    private ObservableList<Persoon> observablePersonen;
+    private transient ObservableList<Gezin> observableGezinnen;
+    private transient ObservableList<Persoon> observablePersonen;
 
     //***********************constructoren***********************************
     /**
@@ -58,6 +60,13 @@ public class Administratie implements Serializable {
      * combinatie van getNaam(), geboorteplaats en geboortedatum), wordt er null
      * geretourneerd.
      */
+    private void readObject(ObjectInputStream ois)
+            throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        observablePersonen = FXCollections.observableList(personen);
+        observableGezinnen = FXCollections.observableList(gezinnen);
+    }
+
     public Persoon addPersoon(Geslacht geslacht, String[] vnamen, String anaam,
             String tvoegsel, Calendar gebdat,
             String gebplaats, Gezin ouderlijkGezin) {
@@ -106,7 +115,7 @@ public class Administratie implements Serializable {
             }
         }
 
-        personen.add(newPersoon);
+        this.observablePersonen.add(newPersoon);
         nextPersNr++;
 
         if (ouderlijkGezin != null) {
@@ -154,7 +163,7 @@ public class Administratie implements Serializable {
         }
 
         Gezin gezin = new Gezin(nextGezinsNr, ouder1, ouder2);
-        gezinnen.add(gezin);
+        this.observableGezinnen.add(gezin);
         nextGezinsNr++;
 
         ouder1.wordtOuderIn(gezin);
@@ -239,7 +248,6 @@ public class Administratie implements Serializable {
 //        if (!ouder1.kanTrouwenOp(ouder1.getGebDat())) {
 //            return null;
 //        }
-        
         for (Gezin g : gezinnen) {
             if (g.getOuder1().equals(ouder1) || g.getOuder2().equals(ouder1)) {
                 if (g.getHuwelijksdatum() != null && (g.getScheidingsdatum() == null || huwdatum.before(g.getScheidingsdatum()))) {
@@ -265,7 +273,7 @@ public class Administratie implements Serializable {
                     ouder1.wordtOuderIn(nieuwgezin);
                     ouder2.wordtOuderIn(nieuwgezin);
 
-                    this.gezinnen.add(nieuwgezin);
+                    this.observableGezinnen.add(nieuwgezin);
                     this.nextGezinsNr++;
                 }
             }
