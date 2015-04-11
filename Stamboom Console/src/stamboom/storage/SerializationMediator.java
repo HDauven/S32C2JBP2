@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import stamboom.controller.StamboomController;
 import stamboom.domain.Administratie;
 
@@ -21,9 +22,9 @@ public class SerializationMediator implements IStorageMediator {
 
     /**
      * bevat de bestandslocatie. Properties is een subclasse van HashTable, een
-     * alternatief voor een List. Het verschil is dat een List een volgorde heeft,
-     * en een HashTable een key/value index die wordt opgevraagd niet op basis van
-     * positie, maar op key.
+     * alternatief voor een List. Het verschil is dat een List een volgorde
+     * heeft, en een HashTable een key/value index die wordt opgevraagd niet op
+     * basis van positie, maar op key.
      */
     private Properties props;
 
@@ -40,14 +41,18 @@ public class SerializationMediator implements IStorageMediator {
         if (!isCorrectlyConfigured()) {
             throw new RuntimeException("Serialization mediator isn't initialized correctly.");
         }
-         try {
-        // todo opgave 2                   
-            
-            File bestand = new File(props.getProperty("file"));
-            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(bestand));
-            Administratie admin = (Administratie) ois.readObject();
-            return admin;
-            
+        try {
+            // todo opgave 2                   
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+            int result = fileChooser.showOpenDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File bestand = fileChooser.getSelectedFile();
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(bestand));
+                Administratie admin = (Administratie) ois.readObject();
+                return admin;
+            }
+
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (RuntimeException ex) {
@@ -63,19 +68,24 @@ public class SerializationMediator implements IStorageMediator {
         if (!isCorrectlyConfigured()) {
             throw new RuntimeException("Serialization mediator isn't initialized correctly.");
         }
-
         // todo opgave 2
-        File bestand = new File(props.getProperty("file"));
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(bestand))) {
-            oos.writeObject(admin);
-            oos.close();
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        int result = fileChooser.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File bestand = fileChooser.getSelectedFile();
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(bestand))) {
+                oos.writeObject(admin);
+                oos.close();
+            }
         }
-        
+
     }
 
     /**
-     * Laadt de instellingen, in de vorm van een Properties bestand, en controleert
-     * of deze in de juiste vorm is.
+     * Laadt de instellingen, in de vorm van een Properties bestand, en
+     * controleert of deze in de juiste vorm is.
+     *
      * @param props
      * @return
      */
@@ -91,10 +101,10 @@ public class SerializationMediator implements IStorageMediator {
     }
 
     /**
-     * Controleert of er een geldig Key/Value paar bestaat in de Properties.
-     * De bedoeling is dat er een Key "file" is, en de Value van die Key 
-     * een String representatie van een FilePath is (eg. C:\\Users\Username\test.txt).
-     * 
+     * Controleert of er een geldig Key/Value paar bestaat in de Properties. De
+     * bedoeling is dat er een Key "file" is, en de Value van die Key een String
+     * representatie van een FilePath is (eg. C:\\Users\Username\test.txt).
+     *
      * @return true if config() contains at least a key "file" and the
      * corresponding value is formatted like a file path
      */
@@ -103,7 +113,7 @@ public class SerializationMediator implements IStorageMediator {
         if (props == null) {
             return false;
         }
-        return props.containsKey("file") 
+        return props.containsKey("file")
                 && props.getProperty("file").contains(File.separator);
     }
 }

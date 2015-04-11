@@ -297,7 +297,7 @@
                                           <Button fx:id="btnCreateStamboom" layoutY="142.0" mnemonicParsing="false" onAction="#createEmptyStamboom" text="Creëer Stamboom" />
                                           <Button fx:id="btnSaveStamboom" layoutX="3.0" layoutY="184.0" mnemonicParsing="false" onAction="#saveStamboom" text="Stamboom Opslaan" />
                                           <Button fx:id="btnOpenStamboom" layoutX="3.0" layoutY="224.0" mnemonicParsing="false" onAction="#openStamboom" text="Stamboom Openen" />
-                                          <ComboBox fx:id="cbPersonenStamboom" layoutX="3.0" layoutY="14.0" prefWidth="150.0" />
+                                          <ComboBox fx:id="cbPersonenStamboom" layoutX="3.0" layoutY="14.0" onAction="#showStamboom2" prefWidth="150.0" />
                                        </children>
                                     </AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">

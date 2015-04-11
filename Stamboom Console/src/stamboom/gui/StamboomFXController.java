@@ -85,7 +85,7 @@ public class StamboomFXController extends StamboomController implements Initiali
     @FXML TextField tfGezinSetHuwelijksdatum;
     @FXML TextField tfGezinSetScheidingsdatum;
     @FXML ListView lvGezinKinderen;
-    
+
     //STAMBOOM
     @FXML Button btnCreateStamboom;
     @FXML Button btnSaveStamboom;
@@ -96,7 +96,7 @@ public class StamboomFXController extends StamboomController implements Initiali
     //opgave 4
     private boolean withDatabase;
     private Administratie admin = new Administratie();
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initComboboxes();
@@ -114,7 +114,7 @@ public class StamboomFXController extends StamboomController implements Initiali
         cbPersonenStamboom.setItems(admin.getPersonen());
         cbGeslachtInvoer.getItems().addAll(Geslacht.MAN, Geslacht.VROUW);
     }
-    
+
     public void selectPersoon(Event evt) {
         Persoon persoon = (Persoon) cbPersonen.getSelectionModel().getSelectedItem();
         showPersoon(persoon);
@@ -306,6 +306,16 @@ public class StamboomFXController extends StamboomController implements Initiali
         }
     }
 
+    public void showStamboom2(Event evt) {
+        if (cbPersonenStamboom.getSelectionModel().getSelectedItem() != null) {
+            Persoon persoon = (Persoon) cbPersonenStamboom.getSelectionModel().getSelectedItem();
+            tfStamboom.clear();
+            tfStamboom.setText(persoon.stamboomAlsString());
+        } else {
+            showDialog("Warning", "Selecteer een persoon.");
+        }
+    }
+
     public void createEmptyStamboom(Event evt) {
         this.clearAdministratie();
         clearTabs();
@@ -314,21 +324,14 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     public void openStamboom(Event evt) {
         // todo opgave 3
-        if (cbPersonenStamboom.getSelectionModel().getSelectedItem() == null)
-        {
-            showDialog("Warning", "Selecteer een persoon.");
-            return;
-        }
-        
+
         SerializationMediator sm = new SerializationMediator();
         try {
-            Persoon persoon = (Persoon) cbPersonenStamboom.getSelectionModel().getSelectedItem();
-            Administratie geladenAdmin = sm.load();
-            tfStamboom.clear();
-            tfStamboom.setText(persoon.stamboomAlsString());
+            sm.load();
         } catch (IOException ex) {
             Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        showDialog("Sucess", "De administratie is geladen!");
     }
 
     public void saveStamboom(Event evt) {
