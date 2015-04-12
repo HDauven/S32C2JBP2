@@ -6,6 +6,8 @@ package stamboom.gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -86,13 +88,6 @@ public class StamboomFXController extends StamboomController implements Initiali
     @FXML TextField tfGezinSetScheidingsdatum;
     @FXML ListView lvGezinKinderen;
 
-    //STAMBOOM
-    @FXML Button btnCreateStamboom;
-    @FXML Button btnSaveStamboom;
-    @FXML Button btnOpenStamboom;
-    @FXML TextField tfStamboom;
-    @FXML ComboBox cbPersonenStamboom;
-
     //opgave 4
     private boolean withDatabase;
     private Administratie admin = new Administratie();
@@ -111,7 +106,6 @@ public class StamboomFXController extends StamboomController implements Initiali
         cbGezinnen.setItems(admin.getGezinnen());
         cbOuderlijkGezin.setItems(admin.getGezinnen());
         cbPersonen.setItems(admin.getPersonen());
-        cbPersonenStamboom.setItems(admin.getPersonen());
         cbGeslachtInvoer.getItems().addAll(Geslacht.MAN, Geslacht.VROUW);
     }
 
@@ -178,8 +172,11 @@ public class StamboomFXController extends StamboomController implements Initiali
                 tfGezinHuwelijksdatum.setText("");
                 tfGezinScheidingsdatum.setText("");
             } else {
-                tfGezinHuwelijksdatum.setText(gezin.getHuwelijksdatum().toString());
-                tfGezinScheidingsdatum.setText(gezin.getScheidingsdatum().toString());
+                SimpleDateFormat df = new SimpleDateFormat("d-M-yyyy");
+                String huwelijksdatumString = df.format(gezin.getHuwelijksdatum().getTime());
+                String scheidingsdatumString = df.format(gezin.getScheidingsdatum().getTime());
+                tfGezinHuwelijksdatum.setText(huwelijksdatumString);
+                tfGezinScheidingsdatum.setText(scheidingsdatumString);
             }
             lvGezinKinderen.setItems(gezin.getKinderen());
         }
@@ -191,7 +188,10 @@ public class StamboomFXController extends StamboomController implements Initiali
             Gezin gezin = (Gezin) cbGezinnen.getSelectionModel().getSelectedItem();
             Calendar huwelijksdatum = StringUtilities.datum(tfGezinSetHuwelijksdatum.getText());
             admin.setHuwelijk(gezin, huwelijksdatum);
-            showDialog("Succes", "De huwelijksdatum van dit gezin is veranderd naar: " + gezin.getHuwelijksdatum().toString());
+            SimpleDateFormat df = new SimpleDateFormat("d-M-yyyy");
+            String huwelijksdatumString = df.format(gezin.getHuwelijksdatum().getTime());
+            showDialog("Succes", "De huwelijksdatum van dit gezin is veranderd naar: " + huwelijksdatumString);
+            tfGezinSetHuwelijksdatum.clear();
         } else {
             showDialog("Warning", "Kies een gezin en vul een huwelijksdatum in.");
         }
@@ -203,7 +203,10 @@ public class StamboomFXController extends StamboomController implements Initiali
             Gezin gezin = (Gezin) cbGezinnen.getSelectionModel().getSelectedItem();
             Calendar scheidingsdatum = StringUtilities.datum(tfGezinSetScheidingsdatum.getText());
             admin.setScheiding(gezin, scheidingsdatum);
-            showDialog("Succes", "De scheidingsdatum van dit gezin is veranderd naar: " + gezin.getScheidingsdatum().toString());
+            SimpleDateFormat df = new SimpleDateFormat("d-M-yyyy");
+            String scheidingsdatumString = df.format(gezin.getScheidingsdatum().getTime());
+            showDialog("Succes", "De scheidingsdatum van dit gezin is veranderd naar: " + scheidingsdatumString);
+            tfGezinSetScheidingsdatum.clear();        
         } else {
             showDialog("Warning", "Kies een gezin en vul een scheidingsdatum in.");
         }
@@ -267,7 +270,7 @@ public class StamboomFXController extends StamboomController implements Initiali
         }
         Gezin g;
         if (huwdatum != null) {
-            g = getAdministratie().addHuwelijk(ouder1, ouder2, huwdatum);
+            g = admin.addHuwelijk(ouder1, ouder2, huwdatum);
             if (g == null) {
                 showDialog("Warning", "Invoer huwelijk is niet geaccepteerd");
             } else {
@@ -276,6 +279,7 @@ public class StamboomFXController extends StamboomController implements Initiali
                     scheidingsdatum = StringUtilities.datum(tfScheidingInvoer.getText());
                     if (scheidingsdatum != null) {
                         getAdministratie().setScheiding(g, scheidingsdatum);
+                        showDialog("Succes", "Gezin is toegevoegd!");
                     }
                 } catch (IllegalArgumentException exc) {
                     showDialog("Warning", "scheidingsdatum :" + exc.getMessage());
@@ -306,16 +310,6 @@ public class StamboomFXController extends StamboomController implements Initiali
         }
     }
 
-    public void showStamboom2(Event evt) {
-        if (cbPersonenStamboom.getSelectionModel().getSelectedItem() != null) {
-            Persoon persoon = (Persoon) cbPersonenStamboom.getSelectionModel().getSelectedItem();
-            tfStamboom.clear();
-            tfStamboom.setText(persoon.stamboomAlsString());
-        } else {
-            showDialog("Warning", "Selecteer een persoon.");
-        }
-    }
-
     public void createEmptyStamboom(Event evt) {
         this.clearAdministratie();
         clearTabs();
@@ -327,7 +321,8 @@ public class StamboomFXController extends StamboomController implements Initiali
 
         SerializationMediator sm = new SerializationMediator();
         try {
-            sm.load();
+            admin = sm.load();
+            initComboboxes();
         } catch (IOException ex) {
             Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
         }

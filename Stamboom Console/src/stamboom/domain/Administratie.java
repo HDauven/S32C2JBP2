@@ -34,6 +34,8 @@ public class Administratie implements Serializable {
         this.observablePersonen = FXCollections.observableList(personen);
         observablePersonen.add(new Persoon(0, new String[]{"Jelle"}, "Widdershoven", "", new GregorianCalendar(1980, Calendar.APRIL, 23), "Sittard", Geslacht.MAN, null));
         observablePersonen.add(new Persoon(1, new String[]{"Piet", "Jacobus"}, "Pietersen", "", new GregorianCalendar(1985, Calendar.MARCH, 11), "Eindhoven", Geslacht.MAN, null));
+        observablePersonen.add(new Persoon(2, new String[]{"Maria"}, "Bruggen", "van", new GregorianCalendar(1983, Calendar.APRIL, 29), "Veldhoven", Geslacht.VROUW, null));
+        observablePersonen.add(new Persoon(3, new String[]{"Sjaak"}, "Oranje", "van", new GregorianCalendar(1983, Calendar.APRIL, 24), "Eindhoven", Geslacht.MAN, null));
         observableGezinnen.add(new Gezin(0, new Persoon(4, new String[]{"Maria"}, "Bruggen", "van", new GregorianCalendar(1983, Calendar.APRIL, 29), "Veldhoven", Geslacht.VROUW, null), new Persoon(5, new String[]{"Sjaak"}, "Oranje", "van", new GregorianCalendar(1983, Calendar.APRIL, 24), "Eindhoven", Geslacht.MAN, null)));
         observableGezinnen.add(new Gezin(0, new Persoon(2, new String[]{"Chiara"}, "Widdershoven", "", new GregorianCalendar(1980, Calendar.APRIL, 23), "Sittard", Geslacht.VROUW, null), new Persoon(3, new String[]{"Jelle"}, "Widdershoven", "", new GregorianCalendar(1980, Calendar.APRIL, 23), "Sittard", Geslacht.MAN, null)));
     }
