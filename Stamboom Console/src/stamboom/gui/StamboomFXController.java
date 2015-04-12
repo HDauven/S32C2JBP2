@@ -24,6 +24,7 @@ import stamboom.domain.Administratie;
 import stamboom.domain.Geslacht;
 import stamboom.domain.Gezin;
 import stamboom.domain.Persoon;
+import stamboom.storage.DatabaseMediator;
 import stamboom.storage.SerializationMediator;
 import stamboom.util.StringUtilities;
 
@@ -318,7 +319,7 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     public void openStamboom(Event evt) {
         // todo opgave 3
-
+        if (!cmDatabase.isSelected()) {
         SerializationMediator sm = new SerializationMediator();
         try {
             admin = sm.load();
@@ -327,17 +328,38 @@ public class StamboomFXController extends StamboomController implements Initiali
             Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
         }
         showDialog("Sucess", "De administratie is geladen!");
+        }
+        else {
+                DatabaseMediator dm = new DatabaseMediator();
+            try {
+                admin = dm.load();
+            } catch (IOException ex) {
+                Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public void saveStamboom(Event evt) {
         // todo opgave 3
+        if (!cmDatabase.isSelected()) {
         SerializationMediator sm = new SerializationMediator();
         try {
             sm.save(admin);
         } catch (IOException ex) {
             Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        showDialog("Succes", "De administratie is opgeslagen!");
+        showDialog("Succes", "De administratie is opgeslagen in een lokaal bestand!");
+        }
+        else {
+            DatabaseMediator dm = new DatabaseMediator();
+            try {
+                dm.save(admin);
+            } 
+            catch (IOException exc) {
+                
+            }
+            showDialog("Succes", "De administratie is opgeslagen in de database!");
+        }
     }
 
     public void closeApplication(Event evt) {
