@@ -127,23 +127,25 @@ public class DatabaseMediator implements IStorageMediator {
                 checkRes.last();
 
                 if (checkRes.getRow() > 0) {
-                    query = "UPDATE PERSONEN SET ACHTERNAAM = ?, VOORNAMEN = ?, TUSSENVOEGSEL = ?, GEBOORTEDATUM = ?, GEBOORTEPLAATS = ?, GESLACHT = ? WHERE PERSOONSNUMMER = ?";
+                    query = "UPDATE PERSONEN SET PERSOONSNUMMER = ?, ACHTERNAAM = ?, VOORNAMEN = ?, TUSSENVOEGSEL = ?, GEBOORTEDATUM = ?, GEBOORTEPLAATS = ?, GESLACHT = ?, OUDERS = ? WHERE PERSOONSNUMMER = ?";
                 } else {
-                    query = "INSERT INTO PERSONEN(ACHTERNAAM, VOORNAMEN, TUSSENVOEGSEL, GEBOORTEDATUM, GEBOORTEPLAATS, GESLACHT, PERSOONSNUMMER) VALUES(?, ?, ?, ?, ? ,? ,?)";
+                    query = "INSERT INTO PERSONEN(PERSOONSNUMMER, ACHTERNAAM, VOORNAMEN, TUSSENVOEGSEL, GEBOORTEDATUM, GEBOORTEPLAATS, GESLACHT, OUDERS) VALUES(?, ?, ?, ?, ? ,? ,?, ?)";
                 }
 
                 preState = this.conn.prepareStatement(query);
-                preState.setString(1, p.getAchternaam());
-                preState.setString(2, p.getVoornamen());
-                preState.setString(3, p.getTussenvoegsel());
+                preState.setInt(1, p.getNr());
+                preState.setString(2, p.getAchternaam());
+                preState.setString(3, p.getVoornamen());
+                preState.setString(4, p.getTussenvoegsel());
 
                 Calendar gebcal = p.getGebDat();
                 Date gebdate = new java.sql.Date(gebcal.getTimeInMillis());
 
-                preState.setDate(4, gebdate);
-                preState.setString(5, p.getGebPlaats());
-                preState.setString(6, p.getGeslacht().toString());
-                preState.setInt(7, p.getNr());
+                preState.setDate(5, gebdate);
+                preState.setString(6, p.getGebPlaats());
+                preState.setString(7, p.getGeslacht().toString());
+                preState.setInt(8, p.getNr());
+                preState.setInt(9, p.getOuderlijkGezin().getNr());
                 preState.execute();
             }
 
