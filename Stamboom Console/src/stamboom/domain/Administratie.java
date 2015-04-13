@@ -1,5 +1,7 @@
 package stamboom.domain;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
 import javafx.collections.FXCollections;
@@ -12,8 +14,8 @@ public class Administratie implements Serializable {
     private int nextPersNr;
     private final List<Persoon> personen;
     private final List<Gezin> gezinnen;
-    private ObservableList<Gezin> observableGezinnen;
-    private ObservableList<Persoon> observablePersonen;
+    private transient ObservableList<Gezin> observableGezinnen;
+    private transient ObservableList<Persoon> observablePersonen;
 
     //***********************constructoren***********************************
     /**
@@ -32,6 +34,8 @@ public class Administratie implements Serializable {
         this.observablePersonen = FXCollections.observableList(personen);
         observablePersonen.add(new Persoon(0, new String[]{"Jelle"}, "Widdershoven", "", new GregorianCalendar(1980, Calendar.APRIL, 23), "Sittard", Geslacht.MAN, null));
         observablePersonen.add(new Persoon(1, new String[]{"Piet", "Jacobus"}, "Pietersen", "", new GregorianCalendar(1985, Calendar.MARCH, 11), "Eindhoven", Geslacht.MAN, null));
+        observablePersonen.add(new Persoon(2, new String[]{"Maria"}, "Bruggen", "van", new GregorianCalendar(1983, Calendar.APRIL, 29), "Veldhoven", Geslacht.VROUW, null));
+        observablePersonen.add(new Persoon(3, new String[]{"Sjaak"}, "Oranje", "van", new GregorianCalendar(1983, Calendar.APRIL, 24), "Eindhoven", Geslacht.MAN, null));
         observableGezinnen.add(new Gezin(0, new Persoon(4, new String[]{"Maria"}, "Bruggen", "van", new GregorianCalendar(1983, Calendar.APRIL, 29), "Veldhoven", Geslacht.VROUW, null), new Persoon(5, new String[]{"Sjaak"}, "Oranje", "van", new GregorianCalendar(1983, Calendar.APRIL, 24), "Eindhoven", Geslacht.MAN, null)));
         observableGezinnen.add(new Gezin(0, new Persoon(2, new String[]{"Chiara"}, "Widdershoven", "", new GregorianCalendar(1980, Calendar.APRIL, 23), "Sittard", Geslacht.VROUW, null), new Persoon(3, new String[]{"Jelle"}, "Widdershoven", "", new GregorianCalendar(1980, Calendar.APRIL, 23), "Sittard", Geslacht.MAN, null)));
     }
@@ -58,6 +62,13 @@ public class Administratie implements Serializable {
      * combinatie van getNaam(), geboorteplaats en geboortedatum), wordt er null
      * geretourneerd.
      */
+    private void readObject(ObjectInputStream ois)
+            throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        observablePersonen = FXCollections.observableList(personen);
+        observableGezinnen = FXCollections.observableList(gezinnen);
+    }
+
     public Persoon addPersoon(Geslacht geslacht, String[] vnamen, String anaam,
             String tvoegsel, Calendar gebdat,
             String gebplaats, Gezin ouderlijkGezin) {
@@ -73,10 +84,8 @@ public class Administratie implements Serializable {
             if (voornaam.trim().isEmpty()) {
                 throw new IllegalArgumentException("lege voornaam is niet toegestaan");
             } else {
-                //voornaam = voornaam.trim();
                 voornamen[Arrays.asList(vnamen).indexOf(voornaam)] = voornaam.trim().substring(0, 1).toUpperCase() + voornaam.trim().substring(1).toLowerCase();
             }
-            //voornaam = voornaam.substring(0, 1).toUpperCase() + voornaam.substring(1).toLowerCase();
         }
 
         // Formatteerd de achternaam van een persoon
@@ -95,32 +104,29 @@ public class Administratie implements Serializable {
             gebplaats = gebplaats.substring(0, 1).toUpperCase() + gebplaats.substring(1).toLowerCase();
         }
 
+        Persoon newPersoon = new Persoon(nextPersNr, voornamen, anaam,
+                tvoegsel.toLowerCase(), gebdat, gebplaats, geslacht, ouderlijkGezin);
         //todo opgave 1
         // Controleert of de persoon uniek is of niet, op basis van een combinatie van naam, plaats en geboortedatum
         for (Persoon p : personen) {
             if (p.getAchternaam().toLowerCase().equals(anaam.toLowerCase())
                     && p.getGebPlaats().toLowerCase().equals(gebplaats.toLowerCase())
-                    && p.getGebDat().equals(gebdat)) {
+                    && p.getGebDat().equals(gebdat)
+                    && p.getInitialen().toLowerCase().equals(newPersoon.getInitialen().toLowerCase())) {
                 return null;
             }
         }
 
-        //for (String s : vnamen)
-        //{
-        //   s = s.substring(0,1).toUpperCase() + s.substring(1).toLowerCase();
-        //}
-        //anaam = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
-        //gebplaats = anaam.substring(0,1).toUpperCase() + anaam.substring(1).toLowerCase();
-        Persoon newPersoon = new Persoon(nextPersNr, voornamen, anaam,
-                tvoegsel.toLowerCase(), gebdat, gebplaats, geslacht, ouderlijkGezin);
+        this.observablePersonen.add(newPersoon);
         nextPersNr++;
-        personen.add(newPersoon);
 
-        if (ouderlijkGezin
-                != null) {
-            ouderlijkGezin.breidUitMet(newPersoon);
+        if (ouderlijkGezin != null) {
+            if (ouderlijkGezin.getOuder2() != null) {
+                if (!ouderlijkGezin.getOuder1().equals(newPersoon) && !ouderlijkGezin.getOuder2().equals(newPersoon)) {
+                    ouderlijkGezin.breidUitMet(newPersoon);
+                }
+            }
         }
-
         return newPersoon;
     }
 
@@ -149,9 +155,18 @@ public class Administratie implements Serializable {
             return null;
         }
 
+        if (ouder1.getGebDat().after(nu)) {
+            return null;
+        }
+        if (ouder2 != null) {
+            if (ouder2.getGebDat().after(nu)) {
+                return null;
+            }
+        }
+
         Gezin gezin = new Gezin(nextGezinsNr, ouder1, ouder2);
+        this.observableGezinnen.add(gezin);
         nextGezinsNr++;
-        gezinnen.add(gezin);
 
         ouder1.wordtOuderIn(gezin);
         if (ouder2 != null) {
@@ -232,6 +247,9 @@ public class Administratie implements Serializable {
             return null;
         }
 
+//        if (!ouder1.kanTrouwenOp(ouder1.getGebDat())) {
+//            return null;
+//        }
         for (Gezin g : gezinnen) {
             if (g.getOuder1().equals(ouder1) || g.getOuder2().equals(ouder1)) {
                 if (g.getHuwelijksdatum() != null && (g.getScheidingsdatum() == null || huwdatum.before(g.getScheidingsdatum()))) {
@@ -244,9 +262,6 @@ public class Administratie implements Serializable {
                 }
             }
 
-            /*if (g.getOuder1().equals(ouder1) && g.getOuder2().equals(ouder2) && g.getHuwelijksdatum() == null) {
-             g.setHuwelijk(huwdatum);
-             }*/
         }
         for (Persoon p : personen) {
             if (p.equals(ouder1)) {
@@ -260,23 +275,13 @@ public class Administratie implements Serializable {
                     ouder1.wordtOuderIn(nieuwgezin);
                     ouder2.wordtOuderIn(nieuwgezin);
 
-                    this.gezinnen.add(nieuwgezin);
+                    this.observableGezinnen.add(nieuwgezin);
                     this.nextGezinsNr++;
                 }
             }
         }
         return nieuwgezin;
 
-        /*
-         if (!ouder1.equals(ouder2) && ouder1.kanTrouwenOp(huwdatum) && ouder2.kanTrouwenOp(huwdatum)) {
-         Gezin g = new Gezin(nextGezinsNr, ouder1, ouder2);
-         g.setScheiding(null);
-         nextGezinsNr++;
-         gezinnen.add(g);
-         return g;
-         } else {
-         return null;
-         }*/
     }
 
     /**

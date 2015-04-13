@@ -374,7 +374,7 @@ public class DomeinTest extends TestCase{
         assertNull("aafke is naderhand getrouwd", adm.addHuwelijk(aafke, frank, datum1));
 
         // Controleert of minderjarige personen niet ook kunnen trouwen
-        Persoon henk = adm.addPersoon(Geslacht.MAN, new String[]{"Henk"},
+        Persoon henk = adm.addPersoon(Geslacht.MAN, new String[]{"Henk"},         
                 "Rotterdam", "van", new GregorianCalendar(1990, Calendar.APRIL, 5), "Dordrecht", null);
         Persoon marjolein = adm.addPersoon(Geslacht.VROUW, new String[]{"Marjolein"},
                 "Leeuw", "de", new GregorianCalendar(1970, Calendar.DECEMBER, 20), "Rotterdam", null);
