@@ -107,7 +107,9 @@ public class StamboomFXController extends StamboomController implements Initiali
         cbGezinnen.setItems(admin.getGezinnen());
         cbOuderlijkGezin.setItems(admin.getGezinnen());
         cbPersonen.setItems(admin.getPersonen());
-        cbGeslachtInvoer.getItems().addAll(Geslacht.MAN, Geslacht.VROUW);
+        if (cbGeslachtInvoer.getItems().isEmpty()) {
+            cbGeslachtInvoer.getItems().addAll(Geslacht.MAN, Geslacht.VROUW);
+        }
     }
 
     public void selectPersoon(Event evt) {
@@ -207,7 +209,7 @@ public class StamboomFXController extends StamboomController implements Initiali
             SimpleDateFormat df = new SimpleDateFormat("d-M-yyyy");
             String scheidingsdatumString = df.format(gezin.getScheidingsdatum().getTime());
             showDialog("Succes", "De scheidingsdatum van dit gezin is veranderd naar: " + scheidingsdatumString);
-            tfGezinSetScheidingsdatum.clear();        
+            tfGezinSetScheidingsdatum.clear();
         } else {
             showDialog("Warning", "Kies een gezin en vul een scheidingsdatum in.");
         }
@@ -271,7 +273,7 @@ public class StamboomFXController extends StamboomController implements Initiali
         }
         Gezin g;
         if (huwdatum != null) {
-            g = admin.addHuwelijk(ouder1, ouder2, huwdatum);
+            g = this.getAdministratie().addHuwelijk(ouder1, ouder2, huwdatum);
             if (g == null) {
                 showDialog("Warning", "Invoer huwelijk is niet geaccepteerd");
             } else {
@@ -279,7 +281,7 @@ public class StamboomFXController extends StamboomController implements Initiali
                 try {
                     scheidingsdatum = StringUtilities.datum(tfScheidingInvoer.getText());
                     if (scheidingsdatum != null) {
-                        admin.setScheiding(g, scheidingsdatum);
+                        this.getAdministratie().setScheiding(g, scheidingsdatum);
                         showDialog("Succes", "Gezin is toegevoegd!");
                     }
                 } catch (IllegalArgumentException exc) {
@@ -287,7 +289,7 @@ public class StamboomFXController extends StamboomController implements Initiali
                 }
             }
         } else {
-            g = admin.addOngehuwdGezin(ouder1, ouder2);
+            g = this.getAdministratie().addOngehuwdGezin(ouder1, ouder2);
             if (g == null) {
                 showDialog("Warning", "Invoer ongehuwd gezin is niet geaccepteerd");
             }
@@ -320,48 +322,46 @@ public class StamboomFXController extends StamboomController implements Initiali
     public void openStamboom(Event evt) {
         // todo opgave 3
         if (!cmDatabase.isSelected()) {
-        SerializationMediator sm = new SerializationMediator();
-        try {
-            admin = sm.load();
-            initComboboxes();
-        } catch (IOException ex) {
-            Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        showDialog("Sucess", "De administratie is geladen!");
-        }
-        else {
-                DatabaseMediator dm = new DatabaseMediator();
+            SerializationMediator sm = new SerializationMediator();
             try {
-               // admin = dm.load();
+                admin = sm.load();
+                initComboboxes();
+            } catch (IOException ex) {
+                Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            showDialog("Sucess", "De administratie is geladen uit het bestand!");
+        } else {
+            DatabaseMediator dm = new DatabaseMediator();
+            try {
+                // admin = dm.load();
                 this.loadFromDatabase();
                 admin = this.getAdministratie();
                 initComboboxes();
             } catch (IOException ex) {
                 Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
             }
+            showDialog("Succes", "De administratie is geladen uit de database!");
         }
     }
 
     public void saveStamboom(Event evt) {
         // todo opgave 3
         if (!cmDatabase.isSelected()) {
-        SerializationMediator sm = new SerializationMediator();
-        try {
-            sm.save(admin);
-        } catch (IOException ex) {
-            Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        showDialog("Succes", "De administratie is opgeslagen in een lokaal bestand!");
-        }
-        else {
+            SerializationMediator sm = new SerializationMediator();
+            try {
+                sm.save(admin);
+            } catch (IOException ex) {
+                Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            showDialog("Succes", "De administratie is opgeslagen in een lokaal bestand!");
+        } else {
             DatabaseMediator dm = new DatabaseMediator();
             try {
                 //dm.save(admin);
                 this.saveToDatabase(admin);
-                
-            } 
-            catch (IOException exc) {
-                
+
+            } catch (IOException exc) {
+
             }
             showDialog("Succes", "De administratie is opgeslagen in de database!");
         }

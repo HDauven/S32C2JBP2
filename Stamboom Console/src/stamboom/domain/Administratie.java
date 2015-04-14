@@ -251,14 +251,16 @@ public class Administratie implements Serializable {
 //            return null;
 //        }
         for (Gezin g : gezinnen) {
-            if (g.getOuder1().equals(ouder1) || g.getOuder2().equals(ouder1)) {
+            if (g.getOuder1().equals(ouder1) || (g.getOuder2() != null && g.getOuder2().equals(ouder1))) {
                 if (g.getHuwelijksdatum() != null && (g.getScheidingsdatum() == null || huwdatum.before(g.getScheidingsdatum()))) {
                     return null;
                 }
             }
-            if (g.getOuder1().equals(ouder2) || g.getOuder2().equals(ouder2)) {
-                if (g.getHuwelijksdatum() != null && (g.getScheidingsdatum() == null || huwdatum.before(g.getScheidingsdatum()))) {
-                    return null;
+            if (g.getOuder2() != null) {
+                if (g.getOuder1().equals(ouder2) || g.getOuder2().equals(ouder2)) {
+                    if (g.getHuwelijksdatum() != null && (g.getScheidingsdatum() == null || huwdatum.before(g.getScheidingsdatum()))) {
+                        return null;
+                    }
                 }
             }
 
