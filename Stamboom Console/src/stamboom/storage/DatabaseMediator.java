@@ -33,69 +33,75 @@ public class DatabaseMediator implements IStorageMediator {
         try {
             this.initConnection();
 
-            Statement stat = this.conn.createStatement();
-            String personenquery = "SELECT * FROM PERSONEN ORDER BY PERSOONSNUMMER",
-                    gezinnenquery = "SELECT * FROM GEZINNEN ORDER BY GEZINSNUMMER",
-                    kindereningezin = "SELECT PERSOONSNUMMER FROM PERSONEN WHERE OUDERS = ?";
+            Statement stat = this.conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            String personenQuery = "SELECT * FROM PERSONEN ORDER BY PERSOONSNUMMER",
+                    gezinnenQuery = "SELECT * FROM GEZINNEN ORDER BY GEZINSNUMMER",
+                    kinderenInGezin = "SELECT PERSOONSNUMMER FROM PERSONEN WHERE OUDERS = ?";
 
-            ResultSet persoonresults = stat.executeQuery(personenquery);
+            ResultSet persoonResults = stat.executeQuery(personenQuery);
 
-            while (persoonresults.next()) {
-                int persoonsnummer = persoonresults.getInt("persoonsNummer");
-                String achternaam = persoonresults.getString("achternaam"),
-                        tussenvoegsel = persoonresults.getString("tussenvoegsel"),
-                        geboorteplaats = persoonresults.getString("geboorteplaats");
-                String[] voornamen = persoonresults.getString("voornamen").split(" ");
-                Geslacht geslacht = Geslacht.valueOf(persoonresults.getString("geslacht").toUpperCase());
+            while (persoonResults.next()) {
+                String achternaam = persoonResults.getString("achternaam"),
+                        tussenvoegsel = persoonResults.getString("tussenvoegsel"),
+                        geboorteplaats = persoonResults.getString("geboorteplaats");
+                String[] voornamen = persoonResults.getString("voornamen").split(" ");
+                Geslacht geslacht = Geslacht.valueOf(persoonResults.getString("geslacht").toUpperCase());
+                
+                if (tussenvoegsel == null) {
+                    tussenvoegsel = "";
+                }
 
                 Calendar gebdatum = Calendar.getInstance();
-                gebdatum.setTime(persoonresults.getDate("geboortedatum"));
+                gebdatum.setTime(persoonResults.getDate("geboortedatum"));
+                Calendar geboorteDatum = gebdatum;
+                
+                
 
-                admin.addPersoon(geslacht, voornamen, achternaam, tussenvoegsel, gebdatum, geboorteplaats, null);
+                admin.addPersoon(geslacht, voornamen, achternaam, tussenvoegsel, geboorteDatum, geboorteplaats, null);
             }
 
-            ResultSet gezinnenresults = stat.executeQuery(gezinnenquery);
+            ResultSet gezinnenResults = stat.executeQuery(gezinnenQuery);
 
-            while (gezinnenresults.next()) {
-                int gezinnr = gezinnenresults.getInt("gezinsnummer"),
-                        ouder1nr = gezinnenresults.getInt("ouder1"),
-                        ouder2nr = gezinnenresults.getInt("ouder2");
+            while (gezinnenResults.next()) {
+                int gezinNr = gezinnenResults.getInt("gezinsnummer"),
+                        ouder1Nr = gezinnenResults.getInt("ouder1"),
+                        ouder2Nr = gezinnenResults.getInt("ouder2");
 
                 Calendar huwelijksDatum = null;
-                if (gezinnenresults.getDate("huwelijksdatum") != null) {
+                if (gezinnenResults.getDate("huwelijksdatum") != null) {
                     Calendar huwdatum = Calendar.getInstance();
-                    huwdatum.setTime(gezinnenresults.getDate("huwelijksdatum"));
+                    huwdatum.setTime(gezinnenResults.getDate("huwelijksdatum"));
                     huwelijksDatum = huwdatum;
                 }
 
                 Calendar scheidingsDatum = null;
-                if (gezinnenresults.getDate("scheidingsdatum") != null) {
+                if (gezinnenResults.getDate("scheidingsdatum") != null) {
                     Calendar scheidatum = Calendar.getInstance();
-                    scheidatum.setTime(gezinnenresults.getDate("scheidingsdatum"));
+                    scheidatum.setTime(gezinnenResults.getDate("scheidingsdatum"));
                     scheidingsDatum = scheidatum;
                 }
 
                 Gezin gezin;
                 if (huwelijksDatum != null) {
-                    gezin = admin.addHuwelijk(admin.getPersoon(ouder1nr), admin.getPersoon(ouder2nr), huwelijksDatum);
+                    gezin = admin.addHuwelijk(admin.getPersoon(ouder1Nr), admin.getPersoon(ouder2Nr), huwelijksDatum);
 
                     if (scheidingsDatum != null) {
                         admin.setScheiding(gezin, scheidingsDatum);
                     }
                 } else {
-                    gezin = admin.addOngehuwdGezin(admin.getPersoon(ouder1nr), admin.getPersoon(ouder2nr));
+                    gezin = admin.addOngehuwdGezin(admin.getPersoon(ouder1Nr), admin.getPersoon(ouder2Nr));
                     
                     if (scheidingsDatum != null) {
                         admin.setScheiding(gezin, scheidingsDatum);
                     }
                 }
 
-                PreparedStatement kinderenPS = this.conn.prepareStatement(kindereningezin);
-                kinderenPS.setInt(1, gezinnr);
+                PreparedStatement kinderenPS = this.conn.prepareStatement(kinderenInGezin, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                kinderenPS.setInt(1, gezinNr);
                 ResultSet kinderenResult = kinderenPS.executeQuery();
 
                 while (kinderenResult.next()) {
-                    int persoonNr = kinderenResult.getInt("persoonsNummer");
+                    int persoonNr = kinderenResult.getInt("persoonsnummer");
 
                     Persoon persoon = admin.getPersoon(persoonNr);
                     admin.setOuders(persoon, gezin);
@@ -115,91 +121,92 @@ public class DatabaseMediator implements IStorageMediator {
         try {
             this.initConnection();
 
-            PreparedStatement preState;
+            PreparedStatement statement;
 
             for (Persoon p : admin.getPersonen()) {
-                String query = "SELECT PERSOONSNUMMER FROM PERSONEN WHERE PERSOONSNUMMER = ?";
+                String query = "SELECT * FROM PERSONEN WHERE PERSOONSNUMMER = ?";
 
-                preState = this.conn.prepareStatement(query);
-                preState.setInt(1, p.getNr());
+                statement = this.conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                statement.setInt(1, p.getNr());
 
-                ResultSet checkRes = preState.executeQuery();
-                checkRes.last();
+                ResultSet result = statement.executeQuery();
+                result.last();
 
-                if (checkRes.getRow() > 0) {
-                    query = "UPDATE PERSONEN SET PERSOONSNUMMER = ?, ACHTERNAAM = ?, VOORNAMEN = ?, TUSSENVOEGSEL = ?, GEBOORTEDATUM = ?, GEBOORTEPLAATS = ?, GESLACHT = ?, OUDERS = ? WHERE PERSOONSNUMMER = ?";
+                if (result.getRow() > 0) {
+                    query = "UPDATE PERSONEN SET ACHTERNAAM = ?, VOORNAMEN = ?, TUSSENVOEGSEL = ?, GEBOORTEDATUM = ?, GEBOORTEPLAATS = ?, GESLACHT = ? WHERE PERSOONSNUMMER = ?";
                 } else {
-                    query = "INSERT INTO PERSONEN(PERSOONSNUMMER, ACHTERNAAM, VOORNAMEN, TUSSENVOEGSEL, GEBOORTEDATUM, GEBOORTEPLAATS, GESLACHT, OUDERS) VALUES(?, ?, ?, ?, ? ,? ,?, ?)";
+                    query = "INSERT INTO PERSONEN(ACHTERNAAM, VOORNAMEN, TUSSENVOEGSEL, GEBOORTEDATUM, GEBOORTEPLAATS, GESLACHT, PERSOONSNUMMER) VALUES(?, ?, ?, ?, ? ,? ,?)";
                 }
 
-                preState = this.conn.prepareStatement(query);
-                preState.setInt(1, p.getNr());
-                preState.setString(2, p.getAchternaam());
-                preState.setString(3, p.getVoornamen());
-                preState.setString(4, p.getTussenvoegsel());
+                statement = this.conn.prepareStatement(query);
+                statement.setString(1, p.getAchternaam());
+                statement.setString(2, p.getVoornamen());
+                if (p.getTussenvoegsel() != null) {
+                    statement.setString(3, p.getTussenvoegsel());
+                }
+                else {
+                    statement.setString(3, "");
+                }
 
                 Calendar gebcal = p.getGebDat();
                 Date gebdate = new java.sql.Date(gebcal.getTimeInMillis());
 
-                preState.setDate(5, gebdate);
-                preState.setString(6, p.getGebPlaats());
-                preState.setString(7, p.getGeslacht().toString());
-                preState.setInt(8, p.getNr());
-                preState.setInt(9, p.getOuderlijkGezin().getNr());
-                preState.execute();
+                statement.setDate(4, gebdate);
+                statement.setString(5, p.getGebPlaats());
+                statement.setString(6, p.getGeslacht().toString());
+                statement.setInt(7, p.getNr());
+                statement.execute();
             }
 
             for (Gezin g : admin.getGezinnen()) {
                 String query = "SELECT GEZINSNUMMER FROM GEZINNEN WHERE GEZINSNUMMER = ?";
 
-                preState = this.conn.prepareStatement(query);
-                preState.setInt(1, g.getNr());
+                statement = this.conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                statement.setInt(1, g.getNr());
 
-                ResultSet checkRes = preState.executeQuery();
+                ResultSet checkRes = statement.executeQuery();
                 checkRes.last();
 
                 if (checkRes.getRow() > 0) {
                     query = "UPDATE GEZINNEN SET OUDER1 = ?, OUDER2 = ?, HUWELIJKSDATUM = ?, SCHEIDINGSDATUM = ? WHERE GEZINSNUMMER = ?";
                 } else {
-                    query = "INSERT INTO GEZINNEN(GEZINSNUMMER, OUDER1, OUDER2, HUWELIJKSDATUM, SCHEIDINGSDATUM) VALUES(?, ?, ?, ?, ?)";
+                    query = "INSERT INTO GEZINNEN(OUDER1, OUDER2, HUWELIJKSDATUM, SCHEIDINGSDATUM, GEZINSNUMMER) VALUES(?, ?, ?, ?, ?)";
                 }
 
-                preState = this.conn.prepareStatement(query);
-                preState.setInt(1, g.getNr());
-                preState.setInt(2, g.getOuder1().getNr());
+                statement = this.conn.prepareStatement(query);
+                statement.setInt(1, g.getOuder1().getNr());
 
                 if (g.getOuder2() == null) {
-                    preState.setNull(3, Types.INTEGER);
+                    statement.setNull(2, Types.INTEGER);
                 } else {
-                    preState.setInt(3, g.getOuder2().getNr());
+                    statement.setInt(2, g.getOuder2().getNr());
                 }
 
                 if (g.getHuwelijksdatum() == null) {
-                    preState.setNull(4, Types.DATE);
+                    statement.setNull(3, Types.DATE);
                 } else {
                     Calendar huwcal = g.getHuwelijksdatum();
                     Date huwdate = new java.sql.Date(huwcal.getTimeInMillis());
-                    preState.setDate(4, huwdate);
+                    statement.setDate(3, huwdate);
                 }
 
                 if (g.getScheidingsdatum()== null) {
-                    preState.setNull(5, Types.DATE);
+                    statement.setNull(4, Types.DATE);
                 } else {
-                    Calendar scheidat = g.getScheidingsdatum();
-                    Date scheidate = new java.sql.Date(scheidat.getTimeInMillis());
-                    preState.setDate(5, scheidate);
+                    Calendar scheical = g.getScheidingsdatum();
+                    Date scheidate = new java.sql.Date(scheical.getTimeInMillis());
+                    statement.setDate(4, scheidate);
                 }
-                
-                preState.execute();
+                statement.setInt(5, g.getNr());
+                statement.execute();
 
                 for (Persoon p : g.getKinderen()) {
-                    query = "UPDATE PERSONEN SET OUDER1 = ?, OUDER2 = ? WHERE PERSOONSNUMMER = ?";
+                    query = "UPDATE PERSONEN SET OUDERS = ? WHERE PERSOONSNUMMER = ?";
 
-                    preState = this.conn.prepareStatement(query);
-                    preState.setInt(1, g.getOuder1().getNr());
-                    preState.setInt(2, g.getOuder2().getNr());
-                    preState.setInt(3, p.getNr());
-                    preState.execute();
+                    statement = this.conn.prepareStatement(query);
+                    statement.setInt(1, g.getNr());
+                    statement.setInt(2, p.getNr());
+                    statement.execute();
                 }
             }
 
@@ -223,7 +230,7 @@ public class DatabaseMediator implements IStorageMediator {
     public final boolean configure(Properties props) {
         this.props = props;
         if (!isCorrectlyConfigured()) {
-            System.err.println("props mist een of meerdere keys");
+            System.err.println("props mist een of meer keys");
             return false;
         }
 
@@ -266,8 +273,8 @@ public class DatabaseMediator implements IStorageMediator {
 
     private void initConnection() throws SQLException {
         //opgave 4
-        String useddriver = this.props.getProperty("driver");
-        if (useddriver != null & !useddriver.isEmpty()) {
+        String driverUsed = this.props.getProperty("driver");
+        if (driverUsed != null & !driverUsed.isEmpty()) {
             System.setProperty("jdcb.drivers", this.props.getProperty("driver"));
             this.conn = DriverManager.getConnection(this.props.getProperty("url"), this.props.getProperty("username"), this.props.getProperty("password"));
         } else {

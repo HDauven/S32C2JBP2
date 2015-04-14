@@ -91,7 +91,7 @@ public class StamboomFXController extends StamboomController implements Initiali
 
     //opgave 4
     private boolean withDatabase;
-    private Administratie admin = new Administratie();
+    private Administratie admin = getAdministratie();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -279,7 +279,7 @@ public class StamboomFXController extends StamboomController implements Initiali
                 try {
                     scheidingsdatum = StringUtilities.datum(tfScheidingInvoer.getText());
                     if (scheidingsdatum != null) {
-                        getAdministratie().setScheiding(g, scheidingsdatum);
+                        admin.setScheiding(g, scheidingsdatum);
                         showDialog("Succes", "Gezin is toegevoegd!");
                     }
                 } catch (IllegalArgumentException exc) {
@@ -287,7 +287,7 @@ public class StamboomFXController extends StamboomController implements Initiali
                 }
             }
         } else {
-            g = getAdministratie().addOngehuwdGezin(ouder1, ouder2);
+            g = admin.addOngehuwdGezin(ouder1, ouder2);
             if (g == null) {
                 showDialog("Warning", "Invoer ongehuwd gezin is niet geaccepteerd");
             }
@@ -332,7 +332,10 @@ public class StamboomFXController extends StamboomController implements Initiali
         else {
                 DatabaseMediator dm = new DatabaseMediator();
             try {
-                admin = dm.load();
+               // admin = dm.load();
+                this.loadFromDatabase();
+                admin = this.getAdministratie();
+                initComboboxes();
             } catch (IOException ex) {
                 Logger.getLogger(StamboomFXController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -353,7 +356,9 @@ public class StamboomFXController extends StamboomController implements Initiali
         else {
             DatabaseMediator dm = new DatabaseMediator();
             try {
-                dm.save(admin);
+                //dm.save(admin);
+                this.saveToDatabase(admin);
+                
             } 
             catch (IOException exc) {
                 

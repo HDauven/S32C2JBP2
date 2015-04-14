@@ -75,7 +75,7 @@ public class DatabaseTest {
         assertEquals("aantal personen onjuist", 4, adm.aantalGeregistreerdePersonen());
         assertEquals("aantal gezinnen onjuist", 3, adm.aantalGeregistreerdeGezinnen());
 
-        controller.saveToDatabase();
+        controller.saveToDatabase(adm);
 
     }
 
