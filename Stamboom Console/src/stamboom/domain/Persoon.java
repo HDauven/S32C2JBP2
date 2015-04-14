@@ -394,7 +394,7 @@ public class Persoon implements Serializable {
     void voegJouwStamboomToe(ArrayList<PersoonMetGeneratie> pmg, int g) {
         //todo opgave 2
         //Voegt een persoon toe aan zijn stamboom
-        pmg.add(new PersoonMetGeneratie((standaardgegevens()), g));
+        pmg.add(new PersoonMetGeneratie((this.standaardgegevens()), g));
 
         // Extra check die de ouders van een persoon op null zet,
         // en vervolgens via het ouderlijk gezin kijkt of deze bekend zijn
@@ -402,9 +402,9 @@ public class Persoon implements Serializable {
         Persoon ouder1 = null;
         Persoon ouder2 = null;
 
-        if (getOuderlijkGezin() != null) {
-            ouder1 = getOuderlijkGezin().getOuder1();
-            ouder2 = getOuderlijkGezin().getOuder2();
+        if (this.getOuderlijkGezin() != null) {
+            ouder1 = this.getOuderlijkGezin().getOuder1();
+            ouder2 = this.getOuderlijkGezin().getOuder2();
         }
 
         if (ouder1 != null) {
@@ -447,12 +447,12 @@ public class Persoon implements Serializable {
         voegJouwStamboomToe(pmg, 0);
 
         for (PersoonMetGeneratie p : pmg) {
-            for (int i = 0; 1 < p.getGeneratie(); i++) {
+            for (int i = 0; i < p.getGeneratie(); i++) {
                 builder.append("  ");
             }
+            
+            builder.append(p.getPersoonsgegevens()).append("\r\n");
 
-            String pGegevens = p.getPersoonsgegevens().trim() + "\n";
-            builder.append(pGegevens);
         }
         return builder.toString();
     }

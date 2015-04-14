@@ -1,6 +1,7 @@
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
+*/
 
 package stamboom.storage;
 
@@ -22,7 +23,7 @@ import stamboom.domain.DomeinTest;
 
 /**
  *
- * @author Albert Lak, Frank Peeters
+ * @author Albert Lak, Frank Peeters */
  
 public class SerialisatieTest extends TestCase {
 
@@ -63,6 +64,8 @@ public class SerialisatieTest extends TestCase {
         } catch (IOException ex) {
             Logger.getLogger(SerialisatieTest.class.getName()).log(Level.SEVERE, null, ex);
             fail();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(SerialisatieTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         adm2 = controller.getAdministratie();
         assertEquals("aantal personen onjuist", adm.aantalGeregistreerdePersonen(), adm2.aantalGeregistreerdePersonen());
@@ -76,7 +79,5 @@ public class SerialisatieTest extends TestCase {
 
         assertEquals("aantal personen in observable personen onjuist", adm.aantalGeregistreerdePersonen() + 1,
                 adm2.getPersonen().size());
-        assertTrue(testOpslag.delete());
     }
 }
-*/
